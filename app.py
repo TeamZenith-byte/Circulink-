@@ -696,7 +696,20 @@ def delete_listing(listing_id):
 # ================================================================
 # RUN APP
 # ================================================================
-if __name__ == '__main__':
-    os.makedirs('uploads', exist_ok=True)
+# ================================================================
+# DATABASE INIT FOR RENDER + LOCAL
+# ================================================================
+os.makedirs('uploads', exist_ok=True)
+
+try:
     init_db()
+    print("DATABASE INITIALIZED SUCCESSFULLY")
+except Exception as e:
+    print("DATABASE INIT ERROR:", str(e))
+
+
+# ================================================================
+# RUN APP
+# ================================================================
+if __name__ == '__main__':
     app.run(debug=True)
