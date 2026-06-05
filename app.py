@@ -39,6 +39,7 @@ def get_db():
 
 
 def init_db():
+    print("DATABASE INITIALIZATION STARTED")
     db = get_db()
     db.executescript('''
         CREATE TABLE IF NOT EXISTS listings (
@@ -690,8 +691,6 @@ def delete_listing(listing_id):
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
-    with app.app_context():
-        init_db()
 
 
 # ================================================================
