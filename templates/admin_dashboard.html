@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard — CIRCULINK 2.0</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body style="background:var(--bg)">
+
+<!-- ADMIN TOP BAR -->
+<div class="admin-topbar">
+  <div class="flex items-center gap-2">
+    <a href="/" style="text-decoration:none;display:flex;align-items:center;gap:8px">
+      <div class="nav-logo" style="width:36px;height:36px;border-radius:8px;background:rgba(255,255,255,0.2);color:white;font-size:14px;font-weight:900;font-family:'Outfit',sans-serif;display:flex;align-items:center;justify-content:center">C</div>
+      <span style="font-family:'Outfit',sans-serif;font-weight:800;font-size:18px;color:white">CIRCULINK</span>
+    </a>
+    <span style="color:rgba(255,255,255,0.5);font-size:14px">/ Admin Dashboard</span>
+  </div>
+  <div class="flex items-center gap-2">
+    <span style="font-size:13px;color:rgba(255,255,255,0.7);font-weight:600">Welcome, Admin</span>
+    <a href="/admin/logout" class="btn btn-sm" style="background:rgba(255,255,255,0.15);color:white;border:1px solid rgba(255,255,255,0.25)">🚪 Logout</a>
+  </div>
+</div>
+
+<!-- STATS -->
+<div class="admin-stats">
+  <div class="admin-stat-card">
+    <div class="admin-stat-num">{{ stats.total_listings or 0 }}</div>
+    <div class="admin-stat-lbl">📦 Active Listings</div>
+  </div>
+  <div class="admin-stat-card" style="--primary:#2563EB">
+    <div class="admin-stat-num" style="color:#2563EB">{{ stats.total_orders or 0 }}</div>
+    <div class="admin-stat-lbl">🛒 Total Orders</div>
+  </div>
+  <div class="admin-stat-card" style="--primary:#D97706">
+    <div class="admin-stat-num" style="color:#D97706">{{ stats.pending_orders or 0 }}</div>
+    <div class="admin-stat-lbl">⏳ Pending Orders</div>
+  </div>
+  <div class="admin-stat-card" style="--primary:#7C3AED">
+    <div class="admin-stat-num" style="color:#7C3AED">{{ stats.total_messages or 0 }}</div>
+    <div class="admin-stat-lbl">✉️ Messages</div>
+  </div>
+  <div class="admin-stat-card" style="--primary:#0891B2">
+    <div class="admin-stat-num" style="color:#0891B2">{{ stats.total_donations or 0 }}</div>
+    <div class="admin-stat-lbl">🤝 Donations</div>
+  </div>
+</div>
+
+<!-- TABS -->
+<div style="padding:0 20px 80px">
+  <div style="background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-sm)">
+
+    <div class="tab-bar" style="border-radius:0">
+      <button class="tab-btn active" onclick="switchTab('orders', this)">🛒 Orders</button>
+      <button class="tab-btn" onclick="switchTab('messages', this)">✉️ Messages</button>
+      <button class="tab-btn" onclick="switchTab('donations', this)">🤝 Donations</button>
+      <button class="tab-btn" onclick="switchTab('listings', this)">📦 Listings</button>
+    </div>
+
+    <!-- ORDERS TAB -->
+    <div class="tab-content active" id="tab-orders">
+      <div style="padding:16px">
+        <div class="table-wrap">
+          {% if orders %}
+          <table>
+            <thead>
+              <tr>
+                <th>#</th><th>Item</th><th>Buyer</th>
+                <th>Phone</th><th>Email</th><th>Qty (kg)</th>
+                <th>Offer (₹/kg)</th><th>Message</th><th>Status</th><th>Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for order in orders %}
+              <tr>
+                <td><strong>#{{ order.id }}</strong></td>
+                <td style="font-weight:700;max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">
+                  {{ order.item_title or 'Listing #' + order.listing_id|string }}
+                </td>
+                <td style="font-weight:600">{{ order.buyer_name }}</td>
+                <td><a href="tel:{{ order.buyer_phone }}" style="color:var(--primary);font-weight:700">{{ order.buyer_phone }}</a></td>
+                <td><a href="mailto:{{ order.buyer_email }}" style="color:var(--primary);font-weight:600;font-size:13px">{{ order.buyer_email }}</a></td>
+                <td style="font-weight:700">{{ order.quantity_wanted }}kg</td>
+                <td style="font-weight:700;color:var(--primary)">
+                  {% if order.offer_price %}₹{{ order.offer_price }}{% else %}<span style="color:var(--text-secondary)">Listed</span>{% endif %}
+                </td>
+                <td style="font-size:13px;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--text-secondary)">
+                  {{ order.message or '—' }}
+                </td>
+                <td>
+                  {% if order.status == 'pending' %}
+                    <span class="badge badge-amber">⏳ Pending</span>
+                  {% elif order.status == 'accepted' %}
+                    <span class="badge badge-green">✅ Accepted</span>
+                  {% else %}
+                    <span class="badge badge-red">❌ Rejected</span>
+                  {% endif %}
+                </td>
+                <td>
+                  {% if order.status == 'pending' %}
+                  <div class="flex gap-1">
+                    <button class="btn btn-primary btn-sm" onclick="updateOrder({{ order.id }}, 'accepted')">✅</button>
+                    <button class="btn btn-danger btn-sm" onclick="updateOrder({{ order.id }}, 'rejected')">❌</button>
+                  </div>
+                  {% else %}
+                  <span style="font-size:12px;color:var(--text-secondary)">Done</span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="empty-state"><span class="empty-ico">📭</span><div class="empty-title">No orders yet</div></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- MESSAGES TAB -->
+    <div class="tab-content" id="tab-messages">
+      <div style="padding:16px">
+        <div class="table-wrap">
+          {% if messages %}
+          <table>
+            <thead>
+              <tr><th>#</th><th>Name</th><th>Email</th><th>Phone</th><th>Subject</th><th>Message</th><th>Date</th><th>Reply</th></tr>
+            </thead>
+            <tbody>
+              {% for msg in messages %}
+              <tr>
+                <td><strong>#{{ msg.id }}</strong></td>
+                <td style="font-weight:700">{{ msg.name }}</td>
+                <td><a href="mailto:{{ msg.email }}" style="color:var(--primary);font-weight:600">{{ msg.email }}</a></td>
+                <td>{{ msg.phone or '—' }}</td>
+                <td><span class="badge badge-blue" style="font-size:11px">{{ msg.subject }}</span></td>
+                <td style="font-size:13px;max-width:200px;color:var(--text-secondary)">{{ msg.message[:80] }}{% if msg.message|length > 80 %}...{% endif %}</td>
+                <td style="font-size:12px;color:var(--text-secondary);white-space:nowrap">{{ msg.created_at[:10] if msg.created_at else '—' }}</td>
+                <td>
+                  <a href="mailto:{{ msg.email }}?subject=Re: {{ msg.subject }}&body=Hi {{ msg.name }}," class="btn btn-primary btn-sm">📧 Reply</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="empty-state"><span class="empty-ico">✉️</span><div class="empty-title">No messages yet</div></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- DONATIONS TAB -->
+    <div class="tab-content" id="tab-donations">
+      <div style="padding:16px">
+        <div class="table-wrap">
+          {% if donations %}
+          <table>
+            <thead>
+              <tr><th>#</th><th>Item</th><th>Category</th><th>Condition</th><th>Qty</th><th>Donor</th><th>Phone</th><th>NGO</th><th>Address</th><th>Date</th></tr>
+            </thead>
+            <tbody>
+              {% for don in donations %}
+              <tr>
+                <td><strong>#{{ don.id }}</strong></td>
+                <td style="font-weight:700">{{ don.item_name }}</td>
+                <td><span class="badge badge-green">{{ don.category }}</span></td>
+                <td><span class="badge badge-blue">{{ don.condition }}</span></td>
+                <td style="font-weight:700">{{ don.quantity }}</td>
+                <td style="font-weight:600">{{ don.donor_name }}</td>
+                <td><a href="tel:{{ don.donor_phone }}" style="color:var(--primary);font-weight:700">{{ don.donor_phone }}</a></td>
+                <td style="font-size:13px;font-weight:700;color:var(--primary-dark)">{{ don.ngo_name }}</td>
+                <td style="font-size:13px;color:var(--text-secondary);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ don.pickup_address }}</td>
+                <td style="font-size:12px;color:var(--text-secondary);white-space:nowrap">{{ don.created_at[:10] if don.created_at else '—' }}</td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="empty-state"><span class="empty-ico">🤝</span><div class="empty-title">No donations yet</div></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- LISTINGS TAB -->
+    <div class="tab-content" id="tab-listings">
+      <div style="padding:16px">
+        <div class="table-wrap">
+          {% if listings %}
+          <table>
+            <thead>
+              <tr><th>#</th><th>Image</th><th>Title</th><th>Category</th><th>Quality</th><th>Price</th><th>Qty</th><th>Seller</th><th>Location</th><th>Date</th><th>Delete</th></tr>
+            </thead>
+            <tbody>
+              {% for listing in listings %}
+              <tr>
+                <td><strong>#{{ listing.id }}</strong></td>
+                <td>
+                  {% if listing.image_path %}
+                  <img src="/uploads/{{ listing.image_path }}" style="width:44px;height:44px;border-radius:8px;object-fit:cover;border:1px solid var(--border)">
+                  {% else %}
+                  <div style="width:44px;height:44px;border-radius:8px;background:var(--primary-light);display:flex;align-items:center;justify-content:center;font-size:20px">♻️</div>
+                  {% endif %}
+                </td>
+                <td style="font-weight:700;max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ listing.title }}</td>
+                <td><span class="badge badge-green">{{ listing.category }}</span></td>
+                <td><span class="badge badge-{{ (listing.quality or 'good')|lower }}">{{ listing.quality or 'Good' }}</span></td>
+                <td style="font-weight:800;color:var(--primary)">₹{{ listing.price }}/kg</td>
+                <td style="font-weight:700">{{ listing.quantity or '—' }}kg</td>
+                <td style="font-weight:600">{{ listing.seller_name or '—' }}</td>
+                <td style="font-size:13px;color:var(--text-secondary)">{{ listing.location or '—' }}</td>
+                <td style="font-size:12px;color:var(--text-secondary);white-space:nowrap">{{ listing.created_at[:10] if listing.created_at else '—' }}</td>
+                <td>
+                  <button class="btn btn-danger btn-sm" onclick="deleteListing({{ listing.id }})">🗑️</button>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% else %}
+          <div class="empty-state"><span class="empty-ico">📦</span><div class="empty-title">No listings yet</div></div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-txt">Updating...</div></div>
+
+<script>
+function switchTab(name, btn) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('tab-' + name).classList.add('active');
+}
+
+async function updateOrder(id, status) {
+  if (!confirm('Mark order #' + id + ' as ' + status + '?')) return;
+  showLoading(true);
+  try {
+    const res = await fetch('/api/order/' + id + '/status', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ status })
+    });
+    const data = await res.json();
+    showLoading(false);
+    if (data.success) { showToast('✅ Order updated!', 'success'); setTimeout(() => location.reload(), 1200); }
+    else showToast(data.error || 'Failed', 'error');
+  } catch(e) { showLoading(false); showToast('Network error', 'error'); }
+}
+
+async function deleteListing(id) {
+  if (!confirm('Delete listing #' + id + '? This cannot be undone.')) return;
+  showLoading(true);
+  try {
+    const res = await fetch('/api/listing/' + id + '/delete', { method: 'POST' });
+    const data = await res.json();
+    showLoading(false);
+    if (data.success) { showToast('🗑️ Listing deleted', 'success'); setTimeout(() => location.reload(), 1200); }
+    else showToast(data.error || 'Failed', 'error');
+  } catch(e) { showLoading(false); showToast('Network error', 'error'); }
+}
+
+function showToast(msg, type='info') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),4000);
+}
+function showLoading(show) { document.getElementById('loadingOverlay').classList.toggle('show',show); }
+</script>
+</body>
+</html>

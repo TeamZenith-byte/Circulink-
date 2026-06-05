@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Contact — CIRCULINK 2.0</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="/" class="nav-brand">
+    <div class="nav-logo">C</div>
+    <span class="nav-brand-name">CIRCU<span>LINK</span></span>
+  </a>
+  <div class="nav-search">
+    <input type="text" placeholder="Search waste categories..." id="navSearch" onkeydown="if(event.key==='Enter') window.location='/marketplace?q='+this.value">
+    <button onclick="window.location='/marketplace?q='+document.getElementById('navSearch').value">🔍</button>
+  </div>
+  <div class="nav-links">
+    <a href="/" class="nav-link"><span class="icon">🏠</span><span>Home</span></a>
+    <a href="/marketplace" class="nav-link"><span class="icon">🛒</span><span>Market</span></a>
+    <a href="/donation" class="nav-link"><span class="icon">♻️</span><span>Sell</span></a>
+    <a href="/contact" class="nav-link active"><span class="icon">📞</span><span>Contact</span></a>
+    <a href="/admin" class="nav-admin-btn">⚙️ Admin</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/">🏠 Home</a>
+  <a href="/marketplace">🛒 Marketplace</a>
+  <a href="/donation">♻️ Sell / Donate</a>
+  <a href="/contact">📞 Contact Us</a>
+  <a href="/admin">⚙️ Admin Panel</a>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <h1>📞 Contact Us</h1>
+    <p>Have questions? Reach out to Team Zenith — we typically respond within 24 hours.</p>
+  </div>
+</div>
+
+<!-- CONTACT SECTION -->
+<section class="section">
+  <div class="container">
+    <div class="contact-grid">
+
+      <!-- LEFT: INFO + FAQ -->
+      <div style="display:flex;flex-direction:column;gap:20px">
+
+        <!-- Info Card -->
+        <div class="contact-info-wrap">
+          <div style="padding:18px 20px;border-bottom:1px solid var(--border);background:var(--primary-pale)">
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:17px">📋 Contact Information</h3>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-ico">📍</div>
+            <div>
+              <div class="contact-info-title">Address</div>
+              <div class="contact-info-val">Siwan College of Engineering &amp; Management<br>Siwan, Bihar, India</div>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-ico">📧</div>
+            <div>
+              <div class="contact-info-title">Email</div>
+              <div class="contact-info-val">teamzenith.circulink@gmail.com</div>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-ico">🏫</div>
+            <div>
+              <div class="contact-info-title">Institution</div>
+              <div class="contact-info-val">Dept. of Computer Science<br>Under Mentor: Ms. Amisha Kumari</div>
+            </div>
+          </div>
+          <div class="contact-info-item">
+            <div class="contact-ico">🏆</div>
+            <div>
+              <div class="contact-info-title">Hackathon</div>
+              <div class="contact-info-val">Sharda University Hackathon 2025<br>Team ID: SISIS176</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- TEAM SECTION -->
+        <div id="team" style="background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-xs)">
+          <div style="padding:18px 20px;border-bottom:1px solid var(--border);background:var(--primary-pale)">
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:17px">👥 Team Zenith</h3>
+          </div>
+          <div style="padding:16px">
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border)">
+                <div style="width:42px;height:42px;border-radius:50%;background:var(--primary);color:white;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:900;font-size:16px;flex-shrink:0">Z</div>
+                <div>
+                  <div style="font-weight:800;font-size:14px">Zishan Alam</div>
+                  <div style="font-size:12px;color:var(--text-secondary)">Team Leader · Full-Stack + AI + Admin</div>
+                </div>
+                <span class="badge badge-green" style="margin-left:auto">Leader</span>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border)">
+                <div style="width:42px;height:42px;border-radius:50%;background:var(--accent);color:white;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:900;font-size:16px;flex-shrink:0">V</div>
+                <div>
+                  <div style="font-weight:800;font-size:14px">Vedika Mishra</div>
+                  <div style="font-size:12px;color:var(--text-secondary)">Frontend · UI Design &amp; Homepage</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border)">
+                <div style="width:42px;height:42px;border-radius:50%;background:var(--info);color:white;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:900;font-size:16px;flex-shrink:0">S</div>
+                <div>
+                  <div style="font-weight:800;font-size:14px">Shreya Singh</div>
+                  <div style="font-size:12px;color:var(--text-secondary)">Frontend · Marketplace UI &amp; Responsive</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border)">
+                <div style="width:42px;height:42px;border-radius:50%;background:#7C3AED;color:white;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:900;font-size:16px;flex-shrink:0">A</div>
+                <div>
+                  <div style="font-weight:800;font-size:14px">Ali Hasan Nat</div>
+                  <div style="font-size:12px;color:var(--text-secondary)">Backend Support · Route Testing</div>
+                </div>
+              </div>
+              <div style="display:flex;align-items:center;gap:12px;padding:10px;border-radius:var(--radius);background:var(--bg);border:1px solid var(--border)">
+                <div style="width:42px;height:42px;border-radius:50%;background:#0891B2;color:white;display:flex;align-items:center;justify-content:center;font-family:'Outfit',sans-serif;font-weight:900;font-size:16px;flex-shrink:0">M</div>
+                <div>
+                  <div style="font-weight:800;font-size:14px">Minhaz Ali Khan</div>
+                  <div style="font-size:12px;color:var(--text-secondary)">Documentation · Report &amp; QA Testing</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- FAQ -->
+        <div id="faq" style="background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius-lg);overflow:hidden;box-shadow:var(--shadow-xs)">
+          <div style="padding:18px 20px;border-bottom:1px solid var(--border);background:var(--primary-pale)">
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:17px">❓ Frequently Asked Questions</h3>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFAQ(this)">
+              <span>How does the AI waste classification work?</span><span>+</span>
+            </div>
+            <div class="faq-a">CIRCULINK uses Google Gemini 1.5 Flash Vision API to analyze your uploaded waste photo. It identifies the waste category, quality grade (0–100), and estimates a fair market price in INR per kg — all within 2–3 seconds.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFAQ(this)">
+              <span>Is listing waste on CIRCULINK free?</span><span>+</span>
+            </div>
+            <div class="faq-a">Yes! Listing waste is completely free. CIRCULINK is a community platform designed to connect sellers and buyers without any commission in the current version.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFAQ(this)">
+              <span>How do I get paid after a buyer places an order?</span><span>+</span>
+            </div>
+            <div class="faq-a">When a buyer places an order, our admin team reviews it and contacts both parties via phone or email to arrange the pickup and payment. We're currently working on UPI/Razorpay integration for Version 2.1.</div>
+          </div>
+          <div class="faq-item">
+            <div class="faq-q" onclick="toggleFAQ(this)">
+              <span>What types of waste does CIRCULINK support?</span><span>+</span>
+            </div>
+            <div class="faq-a">We support 8 major waste categories: Plastic, Paper &amp; Cardboard, Metal, E-Waste, Glass, Organic, Textile, and Rubber. More categories will be added in future versions.</div>
+          </div>
+          <div class="faq-item" style="border-bottom:none">
+            <div class="faq-q" onclick="toggleFAQ(this)">
+              <span>How are NGO donations handled?</span><span>+</span>
+            </div>
+            <div class="faq-a">When you submit a donation, our admin team forwards your details to the selected NGO partner. The NGO will contact you within 24 hours to arrange item pickup or dropoff.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RIGHT: CONTACT FORM -->
+      <div class="contact-form-wrap">
+        <div style="padding:18px 20px;border-bottom:1px solid var(--border);background:var(--primary-pale)">
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:17px">✉️ Send Us a Message</h3>
+          <p style="font-size:13px;color:var(--text-secondary);margin-top:4px">We reply within 24 hours. No spam, promise.</p>
+        </div>
+        <div style="padding:28px">
+          <div id="contactSuccess" class="alert alert-success hidden">
+            ✅ Message sent successfully! We'll reply within 24 hours.
+          </div>
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label">Your Name *</label>
+              <input type="text" class="form-control" id="msgName" placeholder="Full name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email *</label>
+              <input type="email" class="form-control" id="msgEmail" placeholder="your@email.com">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Phone</label>
+            <input type="tel" class="form-control" id="msgPhone" placeholder="10-digit (optional)">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Subject *</label>
+            <select class="form-control" id="msgSubject">
+              <option value="">Select subject...</option>
+              <option>I want to sell waste</option>
+              <option>I want to buy waste</option>
+              <option>NGO partnership inquiry</option>
+              <option>Technical issue</option>
+              <option>Price negotiation</option>
+              <option>General inquiry</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message *</label>
+            <textarea class="form-control" id="msgBody" rows="5" placeholder="Tell us how we can help..."></textarea>
+          </div>
+          <button class="btn btn-primary btn-block btn-lg" onclick="submitContact()">
+            📤 Send Message
+          </button>
+          <p style="font-size:12px;color:var(--text-secondary);text-align:center;margin-top:14px">
+            🔒 Your information is safe with us. We never share your details.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-brand">
+          <div class="nav-logo">C</div>
+          <span class="nav-brand-name">CIRCU<span>LINK</span></span>
+        </div>
+        <p>AI-Powered Circular Waste Marketplace · Team Zenith · Bihar</p>
+        <div class="footer-team-badge">♻️ Team Zenith · SISIS176</div>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="/">Home</a><a href="/marketplace">Marketplace</a>
+        <a href="/donation">Sell Waste</a><a href="/contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>Categories</h4>
+        <a href="#">♻️ Plastic</a><a href="#">⚙️ Metal</a>
+        <a href="#">💻 E-Waste</a><a href="#">📄 Paper</a>
+      </div>
+      <div class="footer-col">
+        <h4>More</h4>
+        <a href="/admin">Admin Panel</a>
+        <a href="#faq">FAQ</a><a href="#team">Team</a>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span>© 2025 CIRCULINK · Team Zenith · SCEM Bihar</span>
+      <span>Sharda University Hackathon 2025</span>
+    </div>
+  </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-items">
+    <a href="/" class="bottom-nav-item"><span class="ico">🏠</span>Home</a>
+    <a href="/marketplace" class="bottom-nav-item"><span class="ico">🛒</span>Market</a>
+    <a href="/donation" class="bottom-nav-item"><span class="ico">♻️</span>Sell</a>
+    <a href="/donation#donate" class="bottom-nav-item"><span class="ico">🤝</span>Donate</a>
+    <a href="/contact" class="bottom-nav-item active"><span class="ico">📞</span>Contact</a>
+  </div>
+</nav>
+
+<div class="toast" id="toast"></div>
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-txt">Sending...</div></div>
+
+<script>
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+document.addEventListener('click', function(e) {
+  const m=document.getElementById('mobileMenu'),h=document.getElementById('hamburger');
+  if(!m.contains(e.target)&&!h.contains(e.target)) m.classList.remove('open');
+});
+
+function toggleFAQ(el) {
+  const ans = el.nextElementSibling;
+  const icon = el.querySelector('span:last-child');
+  const isOpen = ans.classList.contains('open');
+  document.querySelectorAll('.faq-a').forEach(a => a.classList.remove('open'));
+  document.querySelectorAll('.faq-q span:last-child').forEach(s => s.textContent = '+');
+  if (!isOpen) { ans.classList.add('open'); icon.textContent = '−'; }
+}
+
+async function submitContact() {
+  const name = document.getElementById('msgName').value.trim();
+  const email = document.getElementById('msgEmail').value.trim();
+  const subject = document.getElementById('msgSubject').value;
+  const body = document.getElementById('msgBody').value.trim();
+  if (!name||!email||!subject||!body) { showToast('Please fill all required fields', 'error'); return; }
+  showLoading(true);
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({ name, email, phone: document.getElementById('msgPhone').value, subject, message: body })
+    });
+    const data = await res.json();
+    showLoading(false);
+    if (data.success) {
+      document.getElementById('contactSuccess').classList.remove('hidden');
+      ['msgName','msgEmail','msgPhone','msgBody'].forEach(id => document.getElementById(id).value = '');
+      document.getElementById('msgSubject').value = '';
+      showToast('✅ Message sent!', 'success');
+    } else showToast(data.error || 'Failed to send', 'error');
+  } catch(e) { showLoading(false); showToast('Network error', 'error'); }
+}
+
+function showToast(msg, type='info') {
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.className='toast '+type+' show';
+  setTimeout(()=>t.classList.remove('show'),4000);
+}
+function showLoading(show) { document.getElementById('loadingOverlay').classList.toggle('show',show); }
+</script>
+</body>
+</html>

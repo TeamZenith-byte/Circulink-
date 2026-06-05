@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sell / Donate — CIRCULINK 2.0</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="/" class="nav-brand">
+    <div class="nav-logo">C</div>
+    <span class="nav-brand-name">CIRCU<span>LINK</span></span>
+  </a>
+  <div class="nav-search">
+    <input type="text" placeholder="Search waste categories..." id="navSearch" onkeydown="if(event.key==='Enter') window.location='/marketplace?q='+this.value">
+    <button onclick="window.location='/marketplace?q='+document.getElementById('navSearch').value">🔍</button>
+  </div>
+  <div class="nav-links">
+    <a href="/" class="nav-link"><span class="icon">🏠</span><span>Home</span></a>
+    <a href="/marketplace" class="nav-link"><span class="icon">🛒</span><span>Market</span></a>
+    <a href="/donation" class="nav-link active"><span class="icon">♻️</span><span>Sell</span></a>
+    <a href="/contact" class="nav-link"><span class="icon">📞</span><span>Contact</span></a>
+    <a href="/admin" class="nav-admin-btn">⚙️ Admin</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/">🏠 Home</a>
+  <a href="/marketplace">🛒 Marketplace</a>
+  <a href="/donation">♻️ Sell / Donate</a>
+  <a href="/contact">📞 Contact Us</a>
+  <a href="/admin">⚙️ Admin Panel</a>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header">
+  <div class="container">
+    <h1>♻️ Sell Waste or Donate to NGO</h1>
+    <p>Upload a photo — our AI classifies it and suggests a fair price instantly.</p>
+  </div>
+</div>
+
+<!-- TABS -->
+<div class="container" style="margin-top:24px;padding:0 20px">
+  <div style="background:var(--bg-white);border:1px solid var(--border);border-radius:var(--radius-xl);overflow:hidden;box-shadow:var(--shadow-sm)">
+    <div class="tab-bar" style="border-radius:0">
+      <button class="tab-btn active" id="tabSellBtn" onclick="switchTab('sell')">
+        🤖 AI Analysis &amp; Sell
+      </button>
+      <button class="tab-btn" id="tabDonateBtn" onclick="switchTab('donate')">
+        🤝 Donate to NGO
+      </button>
+    </div>
+
+    <!-- ══════════ TAB: SELL ══════════ -->
+    <div class="tab-content active" id="tabSell">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:0;min-height:500px" id="sellGrid">
+
+        <!-- LEFT: UPLOAD -->
+        <div style="padding:28px;border-right:1px solid var(--border)">
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:800;margin-bottom:6px;font-size:18px">📸 Upload Waste Photo</h3>
+          <p style="font-size:13px;color:var(--text-secondary);margin-bottom:20px">Our AI will identify the waste type and estimate its value.</p>
+
+          <!-- Upload Zone -->
+          <div class="upload-zone" id="uploadZone" onclick="document.getElementById('wasteImageInput').click()"
+               ondragover="event.preventDefault();this.classList.add('dragover')"
+               ondragleave="this.classList.remove('dragover')"
+               ondrop="handleDrop(event)">
+            <span class="upload-ico">📤</span>
+            <h3>Drag &amp; Drop or Click to Upload</h3>
+            <p>Supports JPG, PNG, WEBP · <strong>Max 10MB</strong></p>
+          </div>
+          <input type="file" id="wasteImageInput" accept="image/*" style="display:none" onchange="handleFileSelect(this.files[0])">
+
+          <!-- Preview -->
+          <img id="imagePreview" class="img-preview mt-2">
+
+          <!-- Analyze Button -->
+          <button class="btn btn-primary btn-block btn-lg mt-2" id="analyzeBtn" onclick="analyzeWaste()" disabled>
+            🤖 Analyze with AI
+          </button>
+
+          <!-- AI Loading -->
+          <div id="aiLoading" class="hidden text-center mt-3">
+            <div class="spinner" style="margin:0 auto 8px"></div>
+            <p style="font-size:14px;color:var(--text-secondary);font-weight:600">🤖 Gemini AI is analyzing your waste...</p>
+          </div>
+        </div>
+
+        <!-- RIGHT: AI RESULT + FORM -->
+        <div style="padding:28px">
+          <!-- AI RESULT PANEL -->
+          <div class="ai-result-panel" id="aiResultPanel">
+            <div class="ai-result-header">
+              <h3>🤖 AI Analysis Complete</h3>
+              <p id="aiConfidenceText">High confidence result</p>
+            </div>
+            <div class="ai-metrics">
+              <div class="ai-metric">
+                <span class="ai-metric-val" id="aiCategory">—</span>
+                <span class="ai-metric-lbl">Category</span>
+              </div>
+              <div class="ai-metric">
+                <span class="ai-metric-val" id="aiScore">—</span>
+                <span class="ai-metric-lbl">Quality Score</span>
+              </div>
+              <div class="ai-metric">
+                <span class="ai-metric-val" id="aiPrice">—</span>
+                <span class="ai-metric-lbl">Est. Price/kg</span>
+              </div>
+              <div class="ai-metric">
+                <span class="ai-metric-val" id="aiCO2">—</span>
+                <span class="ai-metric-lbl">CO₂ Saved/kg</span>
+              </div>
+            </div>
+            <div class="ai-tips" id="aiTipsSection">
+              <h4>💡 AI Recommendations</h4>
+              <ul id="aiTipsList"></ul>
+            </div>
+          </div>
+
+          <!-- LISTING FORM (shown after AI) -->
+          <div id="listingForm" class="hidden mt-3">
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:800;margin-bottom:16px;font-size:17px">📋 Listing Details</h3>
+            <div class="form-group">
+              <label class="form-label">Title *</label>
+              <input type="text" class="form-control" id="listingTitle" placeholder="e.g. Clean PET Plastic Bottles - 50kg">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="form-group">
+                <label class="form-label">Category *</label>
+                <select class="form-control" id="listingCategory">
+                  <option value="">Select...</option>
+                  <option>Plastic</option><option>Paper</option><option>Metal</option>
+                  <option>E-Waste</option><option>Glass</option><option>Organic</option>
+                  <option>Textile</option><option>Rubber</option>
+                </select>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Quality</label>
+                <select class="form-control" id="listingQuality">
+                  <option>Excellent</option><option>Good</option><option>Fair</option><option>Poor</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="form-group">
+                <label class="form-label">Price (₹/kg) *</label>
+                <input type="number" class="form-control" id="listingPrice" placeholder="0.00" step="0.01">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Quantity (kg) *</label>
+                <input type="number" class="form-control" id="listingQty" placeholder="e.g. 100" min="1">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Your Name *</label>
+              <input type="text" class="form-control" id="listingName" placeholder="Full name">
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+              <div class="form-group">
+                <label class="form-label">Phone *</label>
+                <input type="tel" class="form-control" id="listingPhone" placeholder="10-digit">
+              </div>
+              <div class="form-group">
+                <label class="form-label">Location *</label>
+                <input type="text" class="form-control" id="listingLocation" placeholder="City, State">
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Seller Type</label>
+              <select class="form-control" id="listingSellerType">
+                <option>Individual</option><option>Small Business</option>
+                <option>Restaurant</option><option>Industry</option><option>Hospital</option>
+              </select>
+            </div>
+            <button class="btn btn-primary btn-block btn-lg" onclick="submitListing()">
+              🚀 List on Marketplace
+            </button>
+          </div>
+
+          <!-- Placeholder (before AI) -->
+          <div id="formPlaceholder" style="display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:40px 20px;text-align:center">
+            <span style="font-size:52px;margin-bottom:12px">🤖</span>
+            <h3 style="font-family:'Outfit',sans-serif;font-weight:800;margin-bottom:8px">Upload a photo first</h3>
+            <p style="font-size:13px;color:var(--text-secondary);line-height:1.7">Upload a photo of your waste on the left. Our AI will classify it automatically and fill in the details for you.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════ TAB: DONATE ══════════ -->
+    <div class="tab-content" id="tabDonate">
+      <div style="padding:28px" id="donate">
+        <div class="section-header" style="text-align:left;margin-bottom:24px">
+          <h3 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:20px;margin-bottom:6px">🤝 Donate to a Registered NGO</h3>
+          <p style="font-size:14px;color:var(--text-secondary)">Select an NGO partner and donate your usable items. The NGO will contact you within 24 hours.</p>
+        </div>
+
+        <!-- NGO CARDS -->
+        <div class="ngo-cards">
+          <div class="ngo-card" onclick="selectNGO(this, 'GreenPath Foundation')">
+            <div class="ngo-check">✓</div>
+            <span class="ngo-ico">🌿</span>
+            <div class="ngo-name">GreenPath Foundation</div>
+            <p class="ngo-desc">Environmental NGO promoting sustainable recycling across rural India.</p>
+          </div>
+          <div class="ngo-card" onclick="selectNGO(this, 'EcoKids Initiative')">
+            <div class="ngo-check">✓</div>
+            <span class="ngo-ico">👦</span>
+            <div class="ngo-name">EcoKids Initiative</div>
+            <p class="ngo-desc">Providing eco-friendly school supplies to underprivileged children.</p>
+          </div>
+          <div class="ngo-card" onclick="selectNGO(this, 'ClothForAll')">
+            <div class="ngo-check">✓</div>
+            <span class="ngo-ico">👕</span>
+            <div class="ngo-name">ClothForAll</div>
+            <p class="ngo-desc">Collecting and distributing textile waste to those in need.</p>
+          </div>
+          <div class="ngo-card" onclick="selectNGO(this, 'Urban Recyclers')">
+            <div class="ngo-check">✓</div>
+            <span class="ngo-ico">🏙️</span>
+            <div class="ngo-name">Urban Recyclers</div>
+            <p class="ngo-desc">Processing electronic and plastic waste in urban communities.</p>
+          </div>
+        </div>
+
+        <!-- DONATION FORM -->
+        <div style="background:var(--bg);border:1px solid var(--border);border-radius:var(--radius-lg);padding:24px">
+          <h4 style="font-family:'Outfit',sans-serif;font-weight:800;margin-bottom:18px;font-size:16px">📝 Donation Details</h4>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+            <div class="form-group">
+              <label class="form-label">Item Name *</label>
+              <input type="text" class="form-control" id="donateItem" placeholder="e.g. Old clothes, PET bottles">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Category *</label>
+              <select class="form-control" id="donateCat">
+                <option value="">Select...</option>
+                <option>Plastic</option><option>Paper</option><option>Metal</option>
+                <option>E-Waste</option><option>Glass</option><option>Organic</option>
+                <option>Textile</option><option>Rubber</option><option>Other</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Condition *</label>
+              <select class="form-control" id="donateCondition">
+                <option>Good</option><option>Fair</option><option>Usable</option><option>For Parts</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Quantity (approx) *</label>
+              <input type="text" class="form-control" id="donateQty" placeholder="e.g. 20kg or 5 bags">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Your Name *</label>
+              <input type="text" class="form-control" id="donateName" placeholder="Full name">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Phone *</label>
+              <input type="tel" class="form-control" id="donatePhone" placeholder="10-digit number">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Email *</label>
+              <input type="email" class="form-control" id="donateEmail" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+              <label class="form-label">Address *</label>
+              <input type="text" class="form-control" id="donateAddress" placeholder="Pickup address">
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Photo (Optional)</label>
+            <input type="file" class="form-control" id="donateImage" accept="image/*">
+          </div>
+          <div class="form-group">
+            <label class="form-label">Message</label>
+            <textarea class="form-control" id="donateMsg" rows="2" placeholder="Any special instructions for the NGO..."></textarea>
+          </div>
+          <input type="hidden" id="selectedNGO" value="">
+          <button class="btn btn-primary btn-block btn-lg" onclick="submitDonation()">
+            🤝 Submit Donation Request
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div style="height:60px"></div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-brand">
+          <div class="nav-logo">C</div>
+          <span class="nav-brand-name">CIRCU<span>LINK</span></span>
+        </div>
+        <p>AI-Powered Circular Waste Marketplace · Team Zenith · Bihar</p>
+        <div class="footer-team-badge">♻️ Team Zenith · SISIS176</div>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="/">Home</a>
+        <a href="/marketplace">Marketplace</a>
+        <a href="/donation">Sell Waste</a>
+        <a href="/contact">Contact</a>
+      </div>
+      <div class="footer-col">
+        <h4>NGO Partners</h4>
+        <a href="#">🌿 GreenPath Foundation</a>
+        <a href="#">👦 EcoKids Initiative</a>
+        <a href="#">👕 ClothForAll</a>
+        <a href="#">🏙️ Urban Recyclers</a>
+      </div>
+      <div class="footer-col">
+        <h4>More</h4>
+        <a href="/admin">Admin Panel</a>
+        <a href="/contact#faq">FAQ</a>
+        <a href="/contact#team">Our Team</a>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span>© 2025 CIRCULINK · Team Zenith · SCEM Bihar</span>
+      <span>Sharda University Hackathon 2025</span>
+    </div>
+  </div>
+</footer>
+
+<!-- BOTTOM NAV -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-items">
+    <a href="/" class="bottom-nav-item"><span class="ico">🏠</span>Home</a>
+    <a href="/marketplace" class="bottom-nav-item"><span class="ico">🛒</span>Market</a>
+    <a href="/donation" class="bottom-nav-item active"><span class="ico">♻️</span>Sell</a>
+    <a href="/donation#donate" class="bottom-nav-item"><span class="ico">🤝</span>Donate</a>
+    <a href="/contact" class="bottom-nav-item"><span class="ico">📞</span>Contact</a>
+  </div>
+</nav>
+
+<div class="toast" id="toast"></div>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-txt" id="loadingTxt">Analyzing waste...</div>
+</div>
+
+<script>
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+document.addEventListener('click', function(e) {
+  const m=document.getElementById('mobileMenu'), h=document.getElementById('hamburger');
+  if(!m.contains(e.target)&&!h.contains(e.target)) m.classList.remove('open');
+});
+
+function switchTab(tab) {
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+  document.getElementById('tab' + (tab==='sell'?'SellBtn':'DonateBtn')).classList.add('active');
+  document.getElementById('tab' + (tab==='sell'?'Sell':'Donate')).classList.add('active');
+}
+
+// Responsive sell grid
+function adjustGrid() {
+  const grid = document.getElementById('sellGrid');
+  if(!grid) return;
+  grid.style.gridTemplateColumns = window.innerWidth < 700 ? '1fr' : '1fr 1fr';
+}
+adjustGrid();
+window.addEventListener('resize', adjustGrid);
+
+let selectedFile = null;
+
+function handleFileSelect(file) {
+  if (!file) return;
+  selectedFile = file;
+  const reader = new FileReader();
+  reader.onload = e => {
+    const img = document.getElementById('imagePreview');
+    img.src = e.target.result; img.style.display = 'block';
+  };
+  reader.readAsDataURL(file);
+  document.getElementById('uploadZone').innerHTML = `<span style="font-size:36px">✅</span><h3 style="margin-top:8px">${file.name}</h3><p style="font-size:12px;color:var(--text-secondary)">Click to change image</p>`;
+  document.getElementById('analyzeBtn').disabled = false;
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('dragover');
+  const file = e.dataTransfer.files[0];
+  if (file && file.type.startsWith('image/')) handleFileSelect(file);
+  else showToast('Please drop an image file', 'error');
+}
+
+async function analyzeWaste() {
+  if (!selectedFile) { showToast('Please select an image first', 'error'); return; }
+  document.getElementById('aiLoading').classList.remove('hidden');
+  document.getElementById('analyzeBtn').disabled = true;
+  document.getElementById('loadingTxt').textContent = 'Gemini AI is analyzing your waste...';
+  showLoading(true);
+  try {
+    const fd = new FormData();
+    fd.append('image', selectedFile);
+    const res = await fetch('/api/analyze', { method: 'POST', body: fd });
+    const data = await res.json();
+    showLoading(false);
+    document.getElementById('aiLoading').classList.add('hidden');
+    if (data.success || data.category) {
+      showAIResult(data);
+    } else {
+      showToast('AI analysis failed: ' + (data.error||'Unknown error'), 'error');
+      document.getElementById('analyzeBtn').disabled = false;
+    }
+  } catch(e) {
+    showLoading(false);
+    document.getElementById('aiLoading').classList.add('hidden');
+    showToast('Network error. Please try again.', 'error');
+    document.getElementById('analyzeBtn').disabled = false;
+  }
+}
+
+function showAIResult(data) {
+  const panel = document.getElementById('aiResultPanel');
+  const form = document.getElementById('listingForm');
+  const placeholder = document.getElementById('formPlaceholder');
+  panel.style.display = 'block';
+  form.classList.remove('hidden');
+  if (placeholder) placeholder.style.display = 'none';
+
+  document.getElementById('aiCategory').textContent = data.category || '—';
+  document.getElementById('aiScore').textContent = (data.quality_score || 0) + '/100';
+  document.getElementById('aiPrice').textContent = '₹' + (data.estimated_price || 0);
+  document.getElementById('aiCO2').textContent = (data.co2_saved || 2.5) + 'kg';
+  document.getElementById('aiConfidenceText').textContent = 'AI Confidence: ' + (data.confidence || 85) + '%';
+
+  const tips = data.recommendations || data.tips || [];
+  const tipsList = document.getElementById('aiTipsList');
+  if (tips.length > 0) {
+    tipsList.innerHTML = tips.map(t => `<li>${t}</li>`).join('');
+  } else {
+    document.getElementById('aiTipsSection').style.display = 'none';
+  }
+
+  // Auto-fill form
+  document.getElementById('listingCategory').value = data.category || '';
+  document.getElementById('listingPrice').value = data.estimated_price || '';
+  const qScore = data.quality_score || 50;
+  document.getElementById('listingQuality').value = qScore >= 80 ? 'Excellent' : qScore >= 60 ? 'Good' : qScore >= 40 ? 'Fair' : 'Poor';
+  if (data.category) {
+    document.getElementById('listingTitle').value = data.category + ' Waste — ' + (data.subcategory || 'Mixed');
+  }
+  showToast('✅ AI analysis complete! Review and list your waste.', 'success');
+}
+
+async function submitListing() {
+  const title = document.getElementById('listingTitle').value.trim();
+  const cat = document.getElementById('listingCategory').value;
+  const price = document.getElementById('listingPrice').value;
+  const qty = document.getElementById('listingQty').value;
+  const name = document.getElementById('listingName').value.trim();
+  const phone = document.getElementById('listingPhone').value.trim();
+  const loc = document.getElementById('listingLocation').value.trim();
+  if (!title||!cat||!price||!qty||!name||!phone||!loc) {
+    showToast('Please fill all required fields', 'error'); return;
+  }
+  showLoading(true);
+  try {
+    const fd = new FormData();
+    if (selectedFile) fd.append('image', selectedFile);
+    fd.append('title', title); fd.append('category', cat);
+    fd.append('price', price); fd.append('quantity', qty);
+    fd.append('seller_name', name); fd.append('seller_phone', phone);
+    fd.append('location', loc);
+    fd.append('quality', document.getElementById('listingQuality').value);
+    fd.append('seller_type', document.getElementById('listingSellerType').value);
+    const res = await fetch('/api/list', { method: 'POST', body: fd });
+    const data = await res.json();
+    showLoading(false);
+    if (data.success) {
+      showToast('🚀 Listing published! Redirecting to marketplace...', 'success');
+      setTimeout(() => window.location.href = '/marketplace', 2000);
+    } else showToast(data.error || 'Failed to list', 'error');
+  } catch(e) { showLoading(false); showToast('Network error', 'error'); }
+}
+
+function selectNGO(el, name) {
+  document.querySelectorAll('.ngo-card').forEach(c => c.classList.remove('selected'));
+  el.classList.add('selected');
+  document.getElementById('selectedNGO').value = name;
+}
+
+async function submitDonation() {
+  const item = document.getElementById('donateItem').value.trim();
+  const cat = document.getElementById('donateCat').value;
+  const qty = document.getElementById('donateQty').value.trim();
+  const name = document.getElementById('donateName').value.trim();
+  const phone = document.getElementById('donatePhone').value.trim();
+  const email = document.getElementById('donateEmail').value.trim();
+  const address = document.getElementById('donateAddress').value.trim();
+  const ngo = document.getElementById('selectedNGO').value;
+  if (!item||!cat||!qty||!name||!phone||!email||!address) {
+    showToast('Please fill all required fields', 'error'); return;
+  }
+  if (!ngo) { showToast('Please select an NGO partner', 'error'); return; }
+  showLoading(true);
+  try {
+    const fd = new FormData();
+    fd.append('item_name', item); fd.append('category', cat);
+    fd.append('condition', document.getElementById('donateCondition').value);
+    fd.append('quantity', qty); fd.append('donor_name', name);
+    fd.append('donor_phone', phone); fd.append('donor_email', email);
+    fd.append('pickup_address', address); fd.append('ngo_name', ngo);
+    fd.append('message', document.getElementById('donateMsg').value);
+    const imgFile = document.getElementById('donateImage').files[0];
+    if (imgFile) fd.append('image', imgFile);
+    const res = await fetch('/api/donate', { method: 'POST', body: fd });
+    const data = await res.json();
+    showLoading(false);
+    if (data.success) {
+      showToast('🤝 Donation submitted! NGO will contact you within 24 hours.', 'success');
+      setTimeout(() => window.location.href = '/', 2500);
+    } else showToast(data.error || 'Failed to submit donation', 'error');
+  } catch(e) { showLoading(false); showToast('Network error', 'error'); }
+}
+
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 4500);
+}
+function showLoading(show) { document.getElementById('loadingOverlay').classList.toggle('show', show); }
+
+// Handle #donate hash
+if(window.location.hash === '#donate') switchTab('donate');
+</script>
+</body>
+</html>

@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CIRCULINK 2.0 — AI-Powered Waste Marketplace</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>♻️</text></svg>">
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="/" class="nav-brand">
+    <div class="nav-logo">C</div>
+    <span class="nav-brand-name">CIRCU<span>LINK</span></span>
+  </a>
+  <div class="nav-search">
+    <input type="text" placeholder="Search waste categories, materials..." id="navSearch" onkeydown="if(event.key==='Enter') window.location='/marketplace?q='+this.value">
+    <button onclick="window.location='/marketplace?q='+document.getElementById('navSearch').value">🔍</button>
+  </div>
+  <div class="nav-links">
+    <a href="/" class="nav-link active"><span class="icon">🏠</span><span>Home</span></a>
+    <a href="/marketplace" class="nav-link"><span class="icon">🛒</span><span>Market</span></a>
+    <a href="/donation" class="nav-link"><span class="icon">♻️</span><span>Sell</span></a>
+    <a href="/contact" class="nav-link"><span class="icon">📞</span><span>Contact</span></a>
+    <a href="/admin" class="nav-admin-btn">⚙️ Admin</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- MOBILE MENU -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="/">🏠 Home</a>
+  <a href="/marketplace">🛒 Marketplace</a>
+  <a href="/donation">♻️ Sell / Donate</a>
+  <a href="/contact">📞 Contact Us</a>
+  <a href="/admin">⚙️ Admin Panel</a>
+</div>
+
+<!-- PRICE TICKER -->
+<div class="ticker-bar">
+  <div class="ticker-track">
+    <span class="ticker-item">♻️ Plastic <span class="price">₹4–35/kg</span></span>
+    <span class="ticker-item">📄 Paper &amp; Cardboard <span class="price">₹3–14/kg</span></span>
+    <span class="ticker-item">⚙️ Metal <span class="price">₹20–450/kg</span></span>
+    <span class="ticker-item">💻 E-Waste <span class="price">₹50–800/kg</span></span>
+    <span class="ticker-item">🍶 Glass <span class="price">₹2–8/kg</span></span>
+    <span class="ticker-item">🌿 Organic <span class="price">₹1–6/kg</span></span>
+    <span class="ticker-item">👕 Textile <span class="price">₹5–20/kg</span></span>
+    <span class="ticker-item">🔴 Rubber <span class="price">₹8–40/kg</span></span>
+    <span class="ticker-item">♻️ Plastic <span class="price">₹4–35/kg</span></span>
+    <span class="ticker-item">📄 Paper &amp; Cardboard <span class="price">₹3–14/kg</span></span>
+    <span class="ticker-item">⚙️ Metal <span class="price">₹20–450/kg</span></span>
+    <span class="ticker-item">💻 E-Waste <span class="price">₹50–800/kg</span></span>
+    <span class="ticker-item">🍶 Glass <span class="price">₹2–8/kg</span></span>
+    <span class="ticker-item">🌿 Organic <span class="price">₹1–6/kg</span></span>
+    <span class="ticker-item">👕 Textile <span class="price">₹5–20/kg</span></span>
+    <span class="ticker-item">🔴 Rubber <span class="price">₹8–40/kg</span></span>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-badge">🏆 Sharda University Hackathon 2025 · Team Zenith</div>
+    <h1>
+      Turn Your Waste Into<br>
+      <span class="highlight">Real Money</span> with <span class="highlight-amber">AI</span>
+    </h1>
+    <p>India's first AI-powered circular waste marketplace. Upload a photo, get instant classification, fair price estimation, and connect with verified buyers — in seconds.</p>
+    <div class="hero-buttons">
+      <a href="/donation" class="btn btn-primary btn-lg">♻️ Sell Waste Now</a>
+      <a href="/marketplace" class="btn btn-secondary btn-lg">🛒 Browse Marketplace</a>
+      <a href="/donation#donate" class="btn btn-accent btn-lg">🤝 Donate to NGO</a>
+    </div>
+    <div class="stats-row">
+      <div class="stat-item">
+        <span class="stat-num" id="statListings">{{ stats.total_listings or 0 }}</span>
+        <span class="stat-lbl">Active Listings</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">8</span>
+        <span class="stat-lbl">Waste Types</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num" id="statOrders">{{ stats.total_orders or 0 }}</span>
+        <span class="stat-lbl">Orders Placed</span>
+      </div>
+      <div class="stat-item">
+        <span class="stat-num">AI</span>
+        <span class="stat-lbl">Powered Free</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">⚡ Simple Process</div>
+      <h2 class="section-title">How CIRCULINK Works</h2>
+      <p class="section-sub">From waste photo to cash in your pocket — the entire process takes under 3 minutes.</p>
+    </div>
+    <div class="steps-grid">
+      <div class="step-card animate">
+        <div class="step-num">1</div>
+        <span class="step-icon">📸</span>
+        <div class="step-title">Upload Waste Photo</div>
+        <p class="step-desc">Take a photo of your recyclable waste and upload it on the platform. Any waste type works.</p>
+      </div>
+      <div class="step-card animate">
+        <div class="step-num">2</div>
+        <span class="step-icon">🤖</span>
+        <div class="step-title">AI Classifies It</div>
+        <p class="step-desc">Google Gemini Vision AI identifies category, quality score (0–100), and suggests fair price in seconds.</p>
+      </div>
+      <div class="step-card animate">
+        <div class="step-num">3</div>
+        <span class="step-icon">📋</span>
+        <div class="step-title">List in Marketplace</div>
+        <p class="step-desc">One click to publish your listing. Verified buyers across India can see it instantly.</p>
+      </div>
+      <div class="step-card animate">
+        <div class="step-num">4</div>
+        <span class="step-icon">💰</span>
+        <div class="step-title">Get Paid</div>
+        <p class="step-desc">Buyers place orders or make offers. Admin connects both parties to complete the deal.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="section">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">✨ Platform Features</div>
+      <h2 class="section-title">Everything You Need</h2>
+      <p class="section-sub">A complete waste-to-wealth ecosystem powered by cutting-edge AI technology.</p>
+    </div>
+    <div class="grid-4 animate">
+      <div class="feature-card">
+        <div class="feature-icon-box">🤖</div>
+        <div class="feature-title">AI Waste Analysis</div>
+        <p class="feature-desc">Google Gemini Vision API classifies any waste in 2–3 seconds with quality scoring and price prediction.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-box">💲</div>
+        <div class="feature-title">Fair Price Discovery</div>
+        <p class="feature-desc">AI-generated price estimates eliminate middlemen. Get the real market value for your waste materials.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-box">🌱</div>
+        <div class="feature-title">CO₂ Impact Tracking</div>
+        <p class="feature-desc">Every transaction shows your carbon savings. See exactly how much CO₂ you're saving the planet.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon-box">🤝</div>
+        <div class="feature-title">NGO Donation Hub</div>
+        <p class="feature-desc">Can't sell it? Donate to registered NGO partners — GreenPath, EcoKids, ClothForAll, Urban Recyclers.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RECENT LISTINGS -->
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-header">
+      <div class="section-tag">🛒 Live Listings</div>
+      <h2 class="section-title">Recent Waste Listings</h2>
+      <p class="section-sub">Fresh waste items added by sellers, ready for buyers.</p>
+    </div>
+
+    {% if recent_listings %}
+    <div class="grid-auto animate">
+      {% for listing in recent_listings %}
+      <div class="card">
+        {% if listing.image_path %}
+        <img src="/uploads/{{ listing.image_path }}" alt="{{ listing.title }}" class="card-img">
+        {% else %}
+        <div class="card-img-placeholder">♻️</div>
+        {% endif %}
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="badge badge-green">{{ listing.category }}</span>
+            <span class="badge badge-{{ listing.quality|lower if listing.quality else 'good' }}">{{ listing.quality or 'Good' }}</span>
+          </div>
+          <div class="card-title">{{ listing.title }}</div>
+          <div class="card-location">📍 {{ listing.location or 'India' }}</div>
+          <div class="flex justify-between items-center mb-2">
+            <div>
+              <span class="card-price">₹{{ listing.price }}</span>
+              <span class="card-price-unit">/kg</span>
+            </div>
+            <span class="badge badge-green">🌱 {{ listing.co2_saved or '2.5' }}kg CO₂</span>
+          </div>
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">
+            📦 {{ listing.quantity or 1 }}kg available
+          </div>
+          <div class="card-actions">
+            <button class="btn btn-primary btn-sm" style="flex:1" onclick="openBuyModal({{ listing.id }}, '{{ listing.title|replace("'","") }}', {{ listing.price }})">
+              🛒 Buy Now
+            </button>
+            <button class="btn btn-ghost btn-sm" onclick="openOfferModal({{ listing.id }}, '{{ listing.title|replace("'","") }}', {{ listing.price }})">
+              💬 Offer
+            </button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    <div class="text-center mt-4">
+      <a href="/marketplace" class="btn btn-secondary btn-lg">View All Listings →</a>
+    </div>
+    {% else %}
+    <div class="empty-state">
+      <span class="empty-ico">♻️</span>
+      <div class="empty-title">No listings yet</div>
+      <p class="empty-sub">Be the first seller! Upload your waste and get it listed.</p>
+      <a href="/donation" class="btn btn-primary mt-3">Start Selling</a>
+    </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- INDIA WASTE CRISIS -->
+<section class="section">
+  <div class="container">
+    <div class="cta-banner">
+      <div style="font-size:48px;margin-bottom:16px">🇮🇳</div>
+      <h2>India's Waste Crisis Needs <em>You</em></h2>
+      <p>India generates <strong>62 million metric tons</strong> of waste annually. Only 30–35% gets recycled. CIRCULINK bridges this gap by connecting waste generators directly with recyclers — creating economic value while saving the environment.</p>
+      <div class="cta-btns">
+        <a href="/donation" class="btn btn-white btn-lg">♻️ List Your Waste</a>
+        <a href="/donation#donate" class="btn btn-outline-white btn-lg">🤝 Donate to NGO</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="nav-brand">
+          <div class="nav-logo">C</div>
+          <span class="nav-brand-name">CIRCU<span>LINK</span></span>
+        </div>
+        <p>AI-Powered Circular Waste Marketplace connecting sellers, buyers, and NGOs across India. Transforming waste into sustainable value.</p>
+        <div class="footer-team-badge">♻️ Team Zenith · SISIS176</div>
+      </div>
+      <div class="footer-col">
+        <h4>Platform</h4>
+        <a href="/">Home</a>
+        <a href="/marketplace">Marketplace</a>
+        <a href="/donation">Sell Waste</a>
+        <a href="/donation#donate">Donate to NGO</a>
+      </div>
+      <div class="footer-col">
+        <h4>Waste Types</h4>
+        <a href="/marketplace?cat=Plastic">♻️ Plastic</a>
+        <a href="/marketplace?cat=Metal">⚙️ Metal</a>
+        <a href="/marketplace?cat=E-Waste">💻 E-Waste</a>
+        <a href="/marketplace?cat=Paper">📄 Paper</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="/contact">Contact Us</a>
+        <a href="/admin">Admin Panel</a>
+        <a href="/contact#team">Our Team</a>
+        <a href="/contact#faq">FAQ</a>
+      </div>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <span>© 2025 CIRCULINK · Team Zenith · Siwan College of Engineering &amp; Management, Bihar</span>
+      <span>Sharda University Hackathon 2025 · Built with 💚 &amp; Python Flask</span>
+    </div>
+  </div>
+</footer>
+
+<!-- BOTTOM NAV (MOBILE) -->
+<nav class="bottom-nav">
+  <div class="bottom-nav-items">
+    <a href="/" class="bottom-nav-item active"><span class="ico">🏠</span>Home</a>
+    <a href="/marketplace" class="bottom-nav-item"><span class="ico">🛒</span>Market</a>
+    <a href="/donation" class="bottom-nav-item"><span class="ico">♻️</span>Sell</a>
+    <a href="/donation#donate" class="bottom-nav-item"><span class="ico">🤝</span>Donate</a>
+    <a href="/contact" class="bottom-nav-item"><span class="ico">📞</span>Contact</a>
+  </div>
+</nav>
+
+<!-- BUY MODAL -->
+<div class="modal-overlay" id="buyModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">🛒 Place Buy Request</div>
+      <button class="modal-close" onclick="closeBuyModal()">✕</button>
+    </div>
+    <div class="alert alert-info">💡 Admin will contact you to confirm the purchase.</div>
+    <input type="hidden" id="buyListingId">
+    <div class="form-group">
+      <label class="form-label">Item</label>
+      <input type="text" class="form-control" id="buyItemName" readonly style="background:var(--bg)">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Your Name *</label>
+        <input type="text" class="form-control" id="buyName" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone *</label>
+        <input type="tel" class="form-control" id="buyPhone" placeholder="10-digit number">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email *</label>
+      <input type="email" class="form-control" id="buyEmail" placeholder="your@email.com">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Quantity (kg) *</label>
+        <input type="number" class="form-control" id="buyQty" placeholder="e.g. 50" min="1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Offer Price (₹/kg)</label>
+        <input type="number" class="form-control" id="buyOfferPrice" placeholder="Optional">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message</label>
+      <textarea class="form-control" id="buyMessage" rows="2" placeholder="Any special requirements..."></textarea>
+    </div>
+    <button class="btn btn-primary btn-block btn-lg" onclick="submitBuy()">✅ Confirm Purchase Request</button>
+  </div>
+</div>
+
+<!-- OFFER MODAL -->
+<div class="modal-overlay" id="offerModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">💬 Make an Offer</div>
+      <button class="modal-close" onclick="closeOfferModal()">✕</button>
+    </div>
+    <input type="hidden" id="offerListingId">
+    <div class="form-group">
+      <label class="form-label">Item</label>
+      <input type="text" class="form-control" id="offerItemName" readonly style="background:var(--bg)">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Your Name *</label>
+        <input type="text" class="form-control" id="offerName" placeholder="Full name">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Phone *</label>
+        <input type="tel" class="form-control" id="offerPhone" placeholder="10-digit number">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Email *</label>
+      <input type="email" class="form-control" id="offerEmail" placeholder="your@email.com">
+    </div>
+    <div class="form-row">
+      <div class="form-group">
+        <label class="form-label">Quantity (kg) *</label>
+        <input type="number" class="form-control" id="offerQty" placeholder="e.g. 50" min="1">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Your Offer (₹/kg) *</label>
+        <input type="number" class="form-control" id="offerPrice" placeholder="Your price">
+      </div>
+    </div>
+    <div class="form-group">
+      <label class="form-label">Message</label>
+      <textarea class="form-control" id="offerMessage" rows="2" placeholder="Reason for lower offer..."></textarea>
+    </div>
+    <button class="btn btn-accent btn-block btn-lg" onclick="submitOffer()">📤 Send Offer</button>
+  </div>
+</div>
+
+<!-- TOAST & LOADING -->
+<div class="toast" id="toast"></div>
+<div class="loading-overlay" id="loadingOverlay">
+  <div class="spinner"></div>
+  <div class="loading-txt">Processing...</div>
+</div>
+
+<script src="/static/js/script.js"></script>
+<script>
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  const menu = document.getElementById('mobileMenu');
+  const hamburger = document.getElementById('hamburger');
+  if (!menu.contains(e.target) && !hamburger.contains(e.target)) {
+    menu.classList.remove('open');
+  }
+});
+
+// Animate on scroll
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.12 });
+document.querySelectorAll('.animate').forEach(el => observer.observe(el));
+
+// Buy Modal
+function openBuyModal(id, title, price) {
+  document.getElementById('buyListingId').value = id;
+  document.getElementById('buyItemName').value = title;
+  document.getElementById('buyOfferPrice').placeholder = '₹' + price;
+  document.getElementById('buyModal').classList.add('open');
+}
+function closeBuyModal() { document.getElementById('buyModal').classList.remove('open'); }
+
+function openOfferModal(id, title, price) {
+  document.getElementById('offerListingId').value = id;
+  document.getElementById('offerItemName').value = title;
+  document.getElementById('offerPrice').value = Math.round(price * 0.9);
+  document.getElementById('offerModal').classList.add('open');
+}
+function closeOfferModal() { document.getElementById('offerModal').classList.remove('open'); }
+
+async function submitBuy() {
+  const name = document.getElementById('buyName').value.trim();
+  const phone = document.getElementById('buyPhone').value.trim();
+  const email = document.getElementById('buyEmail').value.trim();
+  const qty = document.getElementById('buyQty').value;
+  if (!name || !phone || !email || !qty) { showToast('Please fill all required fields', 'error'); return; }
+  showLoading(true);
+  try {
+    const res = await fetch('/api/buy', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        listing_id: document.getElementById('buyListingId').value,
+        buyer_name: name, buyer_phone: phone, buyer_email: email,
+        quantity_wanted: qty,
+        offer_price: document.getElementById('buyOfferPrice').value || null,
+        message: document.getElementById('buyMessage').value
+      })
+    });
+    const data = await res.json();
+    showLoading(false);
+    if (data.success) {
+      closeBuyModal();
+      showToast('✅ Purchase request submitted! Admin will contact you soon.', 'success');
+    } else { showToast(data.error || 'Failed to submit', 'error'); }
+  } catch(e) { showLoading(false); showToast('Network error. Please try again.', 'error'); }
+}
+
+async function submitOffer() {
+  const name = document.getElementById('offerName').value.trim();
+  const phone = document.getElementById('offerPhone').value.trim();
+  const email = document.getElementById('offerEmail').value.trim();
+  const qty = document.getElementById('offerQty').value;
+  const price = document.getElementById('offerPrice').value;
+  if (!name || !phone || !email || !qty || !price) { showToast('Please fill all required fields', 'error'); return; }
+  showLoading(true);
+  try {
+    const res = await fetch('/api/buy', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({
+        listing_id: document.getElementById('offerListingId').value,
+        buyer_name: name, buyer_phone: phone, buyer_email: email,
+        quantity_wanted: qty, offer_price: price,
+        message: document.getElementById('offerMessage').value
+      })
+    });
+    const data = await res.json();
+    showLoading(false);
+    if (data.success) {
+      closeOfferModal();
+      showToast('💬 Offer sent! Admin will review and contact you.', 'success');
+    } else { showToast(data.error || 'Failed', 'error'); }
+  } catch(e) { showLoading(false); showToast('Network error.', 'error'); }
+}
+
+function showToast(msg, type='info') {
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.className = 'toast ' + type + ' show';
+  setTimeout(() => t.classList.remove('show'), 4000);
+}
+function showLoading(show) {
+  document.getElementById('loadingOverlay').classList.toggle('show', show);
+}
+</script>
+</body>
+</html>
