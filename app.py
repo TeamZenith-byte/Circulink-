@@ -690,6 +690,8 @@ def delete_listing(listing_id):
         return jsonify({'success': True})
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)})
+    with app.app_context():
+        init_db()
 
 
 # ================================================================
