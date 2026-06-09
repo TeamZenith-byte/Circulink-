@@ -573,7 +573,14 @@ def delete_listing(listing_id):
         return jsonify({'success': False, 'error': str(e)})
 
 
-if __name__ == '__main__':
-    os.makedirs('uploads', exist_ok=True)
+# Render + Local database initialization
+os.makedirs('uploads', exist_ok=True)
+
+try:
     init_db()
+    print("DATABASE INITIALIZED SUCCESSFULLY")
+except Exception as e:
+    print("DATABASE INIT ERROR:", str(e))
+
+if __name__ == '__main__':
     app.run(debug=True)
