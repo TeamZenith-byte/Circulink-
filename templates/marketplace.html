@@ -1,10 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="htmlRoot">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Marketplace — CIRCULINK 2.0</title>
+  <title>Marketplace — CIRCULINK</title>
   <link rel="stylesheet" href="/static/css/style.css">
+  <style>
+    .wa-btn{background:#25D366;color:white;border:none;padding:7px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;gap:5px;transition:all 0.2s;text-decoration:none}
+    .wa-btn:hover{background:#128C7E;transform:translateY(-1px)}
+    .share-btn{background:#E3F2FD;color:#1565C0;border:none;padding:7px 12px;border-radius:6px;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s}
+    .share-btn:hover{background:#1565C0;color:white}
+    .rating-stars{color:#F59E0B;font-size:14px;letter-spacing:1px}
+    .price-calc{background:#F0FDF4;border:1px solid #BBF7D0;border-radius:8px;padding:10px 12px;margin:8px 0;font-size:13px}
+    .price-calc input{width:70px;border:1px solid #ccc;border-radius:5px;padding:4px 6px;font-size:13px;margin:0 4px}
+    .calc-total{font-weight:800;color:#16A34A;font-size:15px}
+    .location-badge{display:inline-flex;align-items:center;gap:4px;background:#EFF6FF;color:#1D4ED8;border-radius:50px;padding:3px 10px;font-size:11px;font-weight:700}
+    .lang-toggle{background:rgba(255,255,255,0.2);color:white;border:1px solid rgba(255,255,255,0.4);border-radius:6px;padding:6px 12px;cursor:pointer;font-weight:700;font-size:13px;transition:all 0.2s}
+    .lang-toggle:hover{background:rgba(255,255,255,0.35)}
+    .wa-float{position:fixed;bottom:80px;right:20px;background:#25D366;color:white;width:54px;height:54px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;text-decoration:none;box-shadow:0 4px 16px rgba(37,211,102,0.5);z-index:1000;transition:all 0.3s;animation:pulse 2s infinite}
+    .wa-float:hover{transform:scale(1.1);background:#128C7E}
+    @keyframes pulse{0%,100%{box-shadow:0 4px 16px rgba(37,211,102,0.5)}50%{box-shadow:0 4px 24px rgba(37,211,102,0.8)}}
+    .price-graph{display:flex;gap:8px;align-items:flex-end;padding:16px;height:120px;background:#F8FAF9;border-radius:10px;margin-top:8px}
+    .bar-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;flex:1}
+    .bar{width:100%;border-radius:4px 4px 0 0;transition:all 0.3s;cursor:pointer;min-height:8px}
+    .bar-label{font-size:9px;font-weight:700;color:var(--text-secondary);text-align:center;line-height:1.2}
+    .bar-val{font-size:9px;font-weight:800;color:var(--primary)}
+    .trend-up{color:#16A34A}
+    .trend-down{color:#DC2626}
+  </style>
 </head>
 <body>
 
@@ -15,26 +38,27 @@
     <span class="nav-brand-name">CIRCU<span>LINK</span></span>
   </a>
   <div class="nav-search">
-    <input type="text" placeholder="Search waste categories, materials..." id="navSearch" onkeydown="if(event.key==='Enter') applySearch(this.value)">
+    <input type="text" placeholder="Search waste..." id="navSearch" onkeydown="if(event.key==='Enter') applySearch(this.value)">
     <button onclick="applySearch(document.getElementById('navSearch').value)">🔍</button>
   </div>
   <div class="nav-links">
-    <a href="/" class="nav-link"><span class="icon">🏠</span><span>Home</span></a>
-    <a href="/marketplace" class="nav-link active"><span class="icon">🛒</span><span>Market</span></a>
-    <a href="/donation" class="nav-link"><span class="icon">♻️</span><span>Sell</span></a>
-    <a href="/contact" class="nav-link"><span class="icon">📞</span><span>Contact</span></a>
+    <a href="/" class="nav-link"><span class="icon">🏠</span><span data-en="Home" data-hi="होम">Home</span></a>
+    <a href="/marketplace" class="nav-link active"><span class="icon">🛒</span><span data-en="Market" data-hi="बाज़ार">Market</span></a>
+    <a href="/donation" class="nav-link"><span class="icon">♻️</span><span data-en="Sell" data-hi="बेचें">Sell</span></a>
+    <a href="/contact" class="nav-link"><span class="icon">📞</span><span data-en="Contact" data-hi="संपर्क">Contact</span></a>
+    <button class="lang-toggle" onclick="toggleLang()" id="langBtn">🇮🇳 हिंदी</button>
     <a href="/admin" class="nav-admin-btn">⚙️ Admin</a>
   </div>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
-  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()"><span></span><span></span><span></span></div>
 </nav>
 <div class="mobile-menu" id="mobileMenu">
-  <a href="/">🏠 Home</a>
-  <a href="/marketplace">🛒 Marketplace</a>
-  <a href="/donation">♻️ Sell / Donate</a>
-  <a href="/contact">📞 Contact Us</a>
-  <a href="/admin">⚙️ Admin Panel</a>
+  <a href="/">🏠 <span data-en="Home" data-hi="होम">Home</span></a>
+  <a href="/marketplace">🛒 <span data-en="Marketplace" data-hi="बाज़ार">Marketplace</span></a>
+  <a href="/donation">♻️ <span data-en="Sell / Donate" data-hi="बेचें / दान">Sell / Donate</span></a>
+  <a href="/contact">📞 <span data-en="Contact" data-hi="संपर्क">Contact</span></a>
+  <button onclick="toggleLang()" style="background:rgba(255,255,255,0.15);color:white;border:none;padding:13px 16px;border-radius:10px;font-weight:700;font-size:15px;text-align:left;cursor:pointer">
+    🌐 <span data-en="Switch to Hindi" data-hi="English पर जाएं">Switch to Hindi</span>
+  </button>
 </div>
 
 <!-- PAGE HEADER -->
@@ -42,10 +66,30 @@
   <div class="container">
     <div class="flex justify-between items-center" style="flex-wrap:wrap;gap:12px">
       <div>
-        <h1>🛒 Waste Marketplace</h1>
-        <p>Browse verified recyclable waste listings from sellers across India.</p>
+        <h1 data-en="🛒 Waste Marketplace" data-hi="🛒 कचरा बाज़ार">🛒 Waste Marketplace</h1>
+        <p data-en="Browse verified recyclable waste from local Bihar/UP sellers" data-hi="बिहार/UP के स्थानीय विक्रेताओं से पुनर्नवीनीकरण कचरा देखें">Browse verified recyclable waste from local Bihar/UP sellers</p>
       </div>
-      <a href="/donation" class="btn btn-primary">+ List Your Waste</a>
+      <a href="/donation" class="btn btn-primary" data-en="+ List Your Waste" data-hi="+ अपना कचरा लिस्ट करें">+ List Your Waste</a>
+    </div>
+  </div>
+</div>
+
+<!-- PRICE GRAPH SECTION -->
+<div style="background:white;border-bottom:1px solid var(--border);padding:16px 0">
+  <div class="container">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:8px">
+      <h4 style="font-family:'Outfit',sans-serif;font-weight:800;font-size:14px" data-en="📈 Live Kabadi Price Trends (INR/kg)" data-hi="📈 लाइव कबाड़ी मूल्य ट्रेंड (₹/kg)">📈 Live Kabadi Price Trends (INR/kg)</h4>
+      <span style="font-size:11px;color:var(--text-secondary)" data-en="Bihar/UP Market · Updated Today" data-hi="बिहार/UP बाज़ार · आज अपडेट">Bihar/UP Market · Updated Today</span>
+    </div>
+    <div class="price-graph" id="priceGraph">
+      <div class="bar-wrap"><div class="bar" style="height:45%;background:#3B82F6"></div><div class="bar-val">₹15</div><div class="bar-label">Plastic ↑</div></div>
+      <div class="bar-wrap"><div class="bar" style="height:25%;background:#10B981"></div><div class="bar-val">₹8</div><div class="bar-label">Paper ↑</div></div>
+      <div class="bar-wrap"><div class="bar" style="height:100%;background:#F59E0B"></div><div class="bar-val">₹35</div><div class="bar-label">Metal ↑</div></div>
+      <div class="bar-wrap"><div class="bar" style="height:90%;background:#8B5CF6"></div><div class="bar-val">₹280</div><div class="bar-label">E-Waste ↑</div></div>
+      <div class="bar-wrap"><div class="bar" style="height:15%;background:#06B6D4"></div><div class="bar-val">₹5</div><div class="bar-label">Glass →</div></div>
+      <div class="bar-wrap"><div class="bar" style="height:8%;background:#84CC16"></div><div class="bar-val">₹2</div><div class="bar-label">Organic ↑</div></div>
+      <div class="bar-wrap"><div class="bar" style="height:33%;background:#EC4899"></div><div class="bar-val">₹11</div><div class="bar-label">Textile ↑</div></div>
+      <div class="bar-wrap"><div class="bar" style="height:38%;background:#F97316"></div><div class="bar-val">₹13</div><div class="bar-label">Rubber ↑</div></div>
     </div>
   </div>
 </div>
@@ -53,64 +97,64 @@
 <!-- STATS BAR -->
 <div style="background:var(--bg-white);border-bottom:1px solid var(--border)">
   <div class="container">
-    <div class="flex gap-3" style="padding:14px 0;flex-wrap:wrap;align-items:center">
-      <div class="flex items-center gap-1" style="font-size:14px;font-weight:700;color:var(--text-secondary)">
-        <span>📦</span> <span><strong id="totalCount" style="color:var(--primary)">{{ listings|length }}</strong> listings</span>
-      </div>
-      <div class="flex items-center gap-1" style="font-size:14px;font-weight:700;color:var(--text-secondary)">
-        <span>📂</span> <span>8 categories</span>
-      </div>
-      <div class="flex items-center gap-1" style="font-size:14px;font-weight:700;color:var(--text-secondary)">
-        <span>💰</span> <span>₹2–₹800/kg price range</span>
-      </div>
-      <div class="flex items-center gap-1" style="font-size:14px;font-weight:700;color:var(--text-secondary)">
-        <span>🌱</span> <span>CO₂ tracked on every deal</span>
-      </div>
+    <div class="flex gap-3" style="padding:12px 0;flex-wrap:wrap;align-items:center">
+      <div style="font-size:14px;font-weight:700;color:var(--text-secondary)">📦 <strong id="totalCount" style="color:var(--primary)">{{ listings|length }}</strong> <span data-en="listings" data-hi="लिस्टिंग">listings</span></div>
+      <div style="font-size:14px;font-weight:700;color:var(--text-secondary)">📂 8 <span data-en="categories" data-hi="श्रेणियां">categories</span></div>
+      <div style="font-size:14px;font-weight:700;color:var(--text-secondary)">📍 <span data-en="Siwan · Gopalganj · Chhapra · Muzaffarpur" data-hi="सिवान · गोपालगंज · छपरा · मुजफ्फरपुर">Siwan · Gopalganj · Chhapra · Muzaffarpur</span></div>
     </div>
   </div>
 </div>
 
-<!-- MAIN CONTENT -->
-<div class="section" style="padding-top:24px">
+<!-- MAIN -->
+<div class="section" style="padding-top:20px">
   <div class="container">
 
-    <!-- FILTER BAR -->
+    <!-- FILTERS -->
     <div class="filter-bar">
-      <div class="filter-search">
+      <div class="filter-search" style="flex:2">
         <span class="search-ico">🔍</span>
         <input type="text" class="form-control" id="searchInput" placeholder="Search by title, category..." oninput="filterListings()">
       </div>
+      <select class="form-control" id="locationSelect" onchange="filterListings()" style="width:auto;min-width:160px">
+        <option value="all">📍 All Cities</option>
+        <option value="Siwan">Siwan</option>
+        <option value="Gopalganj">Gopalganj</option>
+        <option value="Chhapra">Chhapra</option>
+        <option value="Muzaffarpur">Muzaffarpur</option>
+        <option value="Motihari">Motihari</option>
+        <option value="Patna">Patna</option>
+      </select>
       <select class="form-control" id="sortSelect" onchange="filterListings()" style="width:auto;min-width:180px">
         <option value="newest">🕐 Newest First</option>
-        <option value="price_asc">💲 Price: Low to High</option>
-        <option value="price_desc">💲 Price: High to Low</option>
+        <option value="price_asc">💲 Price: Low→High</option>
+        <option value="price_desc">💲 Price: High→Low</option>
         <option value="quality">⭐ Best Quality</option>
+        <option value="rating">🌟 Best Rated</option>
       </select>
     </div>
 
     <!-- CATEGORY CHIPS -->
     <div class="chips mb-2">
-      <div class="chip active" data-cat="all" onclick="setCategory(this, 'all')">🌐 All Categories</div>
-      <div class="chip" data-cat="Plastic" onclick="setCategory(this, 'Plastic')">♻️ Plastic</div>
-      <div class="chip" data-cat="Paper" onclick="setCategory(this, 'Paper')">📄 Paper</div>
-      <div class="chip" data-cat="Metal" onclick="setCategory(this, 'Metal')">⚙️ Metal</div>
-      <div class="chip" data-cat="E-Waste" onclick="setCategory(this, 'E-Waste')">💻 E-Waste</div>
-      <div class="chip" data-cat="Glass" onclick="setCategory(this, 'Glass')">🍶 Glass</div>
-      <div class="chip" data-cat="Organic" onclick="setCategory(this, 'Organic')">🌿 Organic</div>
-      <div class="chip" data-cat="Textile" onclick="setCategory(this, 'Textile')">👕 Textile</div>
-      <div class="chip" data-cat="Rubber" onclick="setCategory(this, 'Rubber')">🔴 Rubber</div>
+      <div class="chip active" data-cat="all" onclick="setCategory(this,'all')">🌐 All</div>
+      <div class="chip" data-cat="Plastic" onclick="setCategory(this,'Plastic')">♻️ Plastic</div>
+      <div class="chip" data-cat="Paper" onclick="setCategory(this,'Paper')">📄 Paper</div>
+      <div class="chip" data-cat="Metal" onclick="setCategory(this,'Metal')">⚙️ Metal</div>
+      <div class="chip" data-cat="E-Waste" onclick="setCategory(this,'E-Waste')">💻 E-Waste</div>
+      <div class="chip" data-cat="Glass" onclick="setCategory(this,'Glass')">🍶 Glass</div>
+      <div class="chip" data-cat="Organic" onclick="setCategory(this,'Organic')">🌿 Organic</div>
+      <div class="chip" data-cat="Textile" onclick="setCategory(this,'Textile')">👕 Textile</div>
+      <div class="chip" data-cat="Rubber" onclick="setCategory(this,'Rubber')">🔴 Rubber</div>
     </div>
 
-    <!-- QUALITY FILTER CHIPS -->
+    <!-- QUALITY CHIPS -->
     <div class="chips mb-3">
-      <div class="chip active" data-quality="all" onclick="setQuality(this, 'all')">All Quality</div>
-      <div class="chip" data-quality="Excellent" onclick="setQuality(this, 'Excellent')">⭐ Excellent</div>
-      <div class="chip" data-quality="Good" onclick="setQuality(this, 'Good')">👍 Good</div>
-      <div class="chip" data-quality="Fair" onclick="setQuality(this, 'Fair')">📊 Fair</div>
-      <div class="chip" data-quality="Poor" onclick="setQuality(this, 'Poor')">⚠️ Poor</div>
+      <div class="chip active" data-quality="all" onclick="setQuality(this,'all')">All Quality</div>
+      <div class="chip" data-quality="Excellent" onclick="setQuality(this,'Excellent')">⭐ Excellent</div>
+      <div class="chip" data-quality="Good" onclick="setQuality(this,'Good')">👍 Good</div>
+      <div class="chip" data-quality="Fair" onclick="setQuality(this,'Fair')">📊 Fair</div>
+      <div class="chip" data-quality="Poor" onclick="setQuality(this,'Poor')">⚠️ Poor</div>
     </div>
 
-    <!-- LISTINGS GRID -->
     {% if listings %}
     <div class="grid-auto" id="listingsGrid">
       {% for listing in listings %}
@@ -120,19 +164,14 @@
            data-quality="{{ listing.quality or 'Good' }}"
            data-price="{{ listing.price }}"
            data-score="{{ listing.quality_score or 50 }}"
-           data-created="{{ listing.created_at }}">
+           data-rating="{{ listing.rating or 0 }}"
+           data-city="{{ listing.city or '' }}"
+           data-location="{{ listing.location or '' }}">
         {% if listing.image_path %}
         <img src="/uploads/{{ listing.image_path }}" alt="{{ listing.title }}" class="card-img">
         {% else %}
         <div class="card-img-placeholder">
-          {% if listing.category == 'Plastic' %}♻️
-          {% elif listing.category == 'Metal' %}⚙️
-          {% elif listing.category == 'E-Waste' %}💻
-          {% elif listing.category == 'Glass' %}🍶
-          {% elif listing.category == 'Organic' %}🌿
-          {% elif listing.category == 'Textile' %}👕
-          {% elif listing.category == 'Rubber' %}🔴
-          {% else %}📄{% endif %}
+          {% if listing.category == 'Plastic' %}♻️{% elif listing.category == 'Metal' %}⚙️{% elif listing.category == 'E-Waste' %}💻{% elif listing.category == 'Glass' %}🍶{% elif listing.category == 'Organic' %}🌿{% elif listing.category == 'Textile' %}👕{% elif listing.category == 'Rubber' %}🔴{% else %}📄{% endif %}
         </div>
         {% endif %}
         <div class="card-body">
@@ -141,26 +180,57 @@
             <span class="badge badge-{{ (listing.quality or 'good')|lower }}">{{ listing.quality or 'Good' }}</span>
           </div>
           <div class="card-title">{{ listing.title }}</div>
-          <div class="card-location">📍 {{ listing.location or 'India' }} · {{ listing.seller_type or 'Individual' }}</div>
-          <div class="flex justify-between items-center" style="margin-bottom:10px">
-            <div>
-              <span class="card-price">₹{{ listing.price }}</span>
-              <span class="card-price-unit">/kg</span>
-            </div>
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;flex-wrap:wrap">
+            <span class="location-badge">📍 {{ listing.city or listing.location or 'Bihar' }}</span>
+            {% if listing.rating and listing.rating > 0 %}
+            <span class="rating-stars">
+              {% for i in range(1,6) %}{% if i <= listing.rating|int %}★{% else %}☆{% endif %}{% endfor %}
+            </span>
+            <span style="font-size:11px;color:var(--text-secondary)">({{ listing.rating_count or 0 }})</span>
+            {% endif %}
+          </div>
+          <div class="flex justify-between items-center" style="margin-bottom:6px">
+            <div><span class="card-price">₹{{ listing.price }}</span><span class="card-price-unit">/kg</span></div>
             <span class="badge badge-green">🌱 {{ listing.co2_saved or '2.5' }}kg CO₂</span>
           </div>
-          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:12px">
-            📦 {{ listing.quantity or 1 }}kg · 🏷️ {{ listing.subcategory or listing.category }}
+          <div style="font-size:12px;color:var(--text-secondary);margin-bottom:8px">📦 {{ listing.quantity or 1 }}kg · {{ listing.seller_type or 'Individual' }} · {{ listing.seller_name or 'Seller' }}</div>
+
+          <!-- PRICE CALCULATOR -->
+          <div class="price-calc">
+            <span style="font-size:11px;font-weight:700;color:var(--text-secondary)">🧮 CALCULATOR:</span>
+            <div style="display:flex;align-items:center;gap:4px;margin-top:4px;flex-wrap:wrap">
+              <input type="number" placeholder="Qty (kg)" min="1" value="10"
+                onchange="calcPrice(this, {{ listing.price }})"
+                oninput="calcPrice(this, {{ listing.price }})"
+                style="width:80px;border:1px solid #ccc;border-radius:5px;padding:4px 6px;font-size:13px">
+              <span style="color:var(--text-secondary)">× ₹{{ listing.price }}/kg =</span>
+              <span class="calc-total" id="calc-{{ listing.id }}">₹{{ (listing.price * 10)|round|int }}</span>
+            </div>
           </div>
-          <div class="card-actions">
-            <button class="btn btn-primary btn-sm" style="flex:1"
-              onclick="openBuyModal({{ listing.id }}, '{{ listing.title|replace("'","") }}', {{ listing.price }})">
-              🛒 Buy Now
-            </button>
-            <button class="btn btn-ghost btn-sm"
-              onclick="openOfferModal({{ listing.id }}, '{{ listing.title|replace("'","") }}', {{ listing.price }})">
-              💬 Offer
-            </button>
+
+          <!-- STAR RATING INPUT -->
+          <div style="margin-bottom:8px">
+            <span style="font-size:11px;font-weight:700;color:var(--text-secondary)">RATE SELLER:</span>
+            <div class="flex gap-1" style="margin-top:2px">
+              {% for i in range(1,6) %}
+              <span style="font-size:20px;cursor:pointer;color:#D1D5DB;transition:color 0.2s"
+                onmouseover="highlightStars(this, {{ i }})"
+                onmouseout="resetStars(this.parentElement, {{ listing.rating or 0 }})"
+                onclick="rateListing({{ listing.id }}, {{ i }}, this.parentElement)">★</span>
+              {% endfor %}
+            </div>
+          </div>
+
+          <!-- ACTION BUTTONS -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+            <button class="btn btn-primary btn-sm" onclick="openBuyModal({{ listing.id }}, '{{ listing.title|replace("'","") }}', {{ listing.price }})">🛒 Buy Now</button>
+            <button class="btn btn-ghost btn-sm" onclick="openOfferModal({{ listing.id }}, '{{ listing.title|replace("'","") }}', {{ listing.price }})">💬 Offer</button>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            <a href="https://wa.me/91{{ listing.seller_phone or '9000000000' }}?text={{ 'Hi, I saw your listing on CIRCULINK: ' + listing.title|replace(' ', '%20') }}" target="_blank" class="wa-btn" style="justify-content:center">
+              📱 WhatsApp
+            </a>
+            <button class="share-btn" onclick="shareListing('{{ listing.title|replace("'","") }}', {{ listing.price }}, '{{ listing.location or 'Bihar' }}')">📤 Share</button>
           </div>
         </div>
       </div>
@@ -170,18 +240,14 @@
     <div class="empty-state">
       <span class="empty-ico">📦</span>
       <div class="empty-title">No listings yet</div>
-      <p class="empty-sub">Be the first to list recyclable waste on CIRCULINK!</p>
       <a href="/donation" class="btn btn-primary mt-3">+ List Your Waste</a>
     </div>
     {% endif %}
-
-    <!-- NO RESULTS (shown by JS) -->
     <div class="empty-state hidden" id="noResults">
       <span class="empty-ico">🔍</span>
       <div class="empty-title">No listings found</div>
-      <p class="empty-sub">Try different filters or search terms.</p>
+      <p class="empty-sub">Try different filters</p>
     </div>
-
   </div>
 </div>
 
@@ -190,94 +256,50 @@
   <div class="footer-inner">
     <div class="footer-grid">
       <div class="footer-brand">
-        <div class="nav-brand">
-          <div class="nav-logo">C</div>
-          <span class="nav-brand-name">CIRCU<span>LINK</span></span>
-        </div>
-        <p>AI-Powered Circular Waste Marketplace · Team Zenith · Bihar</p>
-        <div class="footer-team-badge">♻️ Team Zenith · SISIS176</div>
+        <div class="nav-brand"><div class="nav-logo">C</div><span class="nav-brand-name">CIRCU<span>LINK</span></span></div>
+        <p>AI-Powered Circular Waste Marketplace · Bihar, India</p>
+        <div class="footer-team-badge">♻️ CIRCULINK · AI Waste Platform</div>
       </div>
-      <div class="footer-col">
-        <h4>Platform</h4>
-        <a href="/">Home</a>
-        <a href="/marketplace">Marketplace</a>
-        <a href="/donation">Sell Waste</a>
-        <a href="/contact">Contact</a>
-      </div>
-      <div class="footer-col">
-        <h4>Categories</h4>
-        <a href="#">♻️ Plastic</a>
-        <a href="#">⚙️ Metal</a>
-        <a href="#">💻 E-Waste</a>
-        <a href="#">📄 Paper</a>
-      </div>
-      <div class="footer-col">
-        <h4>More</h4>
-        <a href="/admin">Admin Panel</a>
-        <a href="/contact#faq">FAQ</a>
-        <a href="/contact#team">Team</a>
-      </div>
+      <div class="footer-col"><h4>Platform</h4><a href="/">Home</a><a href="/marketplace">Marketplace</a><a href="/donation">Sell Waste</a><a href="/contact">Contact</a></div>
+      <div class="footer-col"><h4>Cities</h4><a href="#">Siwan</a><a href="#">Gopalganj</a><a href="#">Chhapra</a><a href="#">Muzaffarpur</a></div>
+      <div class="footer-col"><h4>More</h4><a href="/admin">Admin Panel</a><a href="/contact#faq">FAQ</a></div>
     </div>
     <div class="footer-divider"></div>
-    <div class="footer-bottom">
-      <span>© 2025 CIRCULINK · Team Zenith · SCEM Bihar</span>
-      <span>Sharda University Hackathon 2025</span>
-    </div>
+    <div class="footer-bottom"><span>© 2025 CIRCULINK · AI-Powered Waste Marketplace · Bihar, India</span></div>
   </div>
 </footer>
 
 <!-- BOTTOM NAV -->
 <nav class="bottom-nav">
   <div class="bottom-nav-items">
-    <a href="/" class="bottom-nav-item"><span class="ico">🏠</span>Home</a>
-    <a href="/marketplace" class="bottom-nav-item active"><span class="ico">🛒</span>Market</a>
-    <a href="/donation" class="bottom-nav-item"><span class="ico">♻️</span>Sell</a>
-    <a href="/donation#donate" class="bottom-nav-item"><span class="ico">🤝</span>Donate</a>
-    <a href="/contact" class="bottom-nav-item"><span class="ico">📞</span>Contact</a>
+    <a href="/" class="bottom-nav-item"><span class="ico">🏠</span><span data-en="Home" data-hi="होम">Home</span></a>
+    <a href="/marketplace" class="bottom-nav-item active"><span class="ico">🛒</span><span data-en="Market" data-hi="बाज़ार">Market</span></a>
+    <a href="/donation" class="bottom-nav-item"><span class="ico">♻️</span><span data-en="Sell" data-hi="बेचें">Sell</span></a>
+    <a href="/donation#donate" class="bottom-nav-item"><span class="ico">🤝</span><span data-en="Donate" data-hi="दान">Donate</span></a>
+    <a href="/contact" class="bottom-nav-item"><span class="ico">📞</span><span data-en="Contact" data-hi="संपर्क">Contact</span></a>
   </div>
 </nav>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/918800000000?text=Hello%20CIRCULINK%20-%20I%20want%20to%20buy%20or%20sell%20waste" target="_blank" class="wa-float" title="WhatsApp pe Contact Karo">💬</a>
 
 <!-- BUY MODAL -->
 <div class="modal-overlay" id="buyModal">
   <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">🛒 Buy Request</div>
-      <button class="modal-close" onclick="closeBuyModal()">✕</button>
-    </div>
-    <div class="alert alert-info">Admin will contact you to finalize the deal.</div>
+    <div class="modal-header"><div class="modal-title">🛒 Buy Request</div><button class="modal-close" onclick="closeBuyModal()">✕</button></div>
+    <div class="alert alert-info">Admin will contact you to finalize.</div>
     <input type="hidden" id="buyListingId">
-    <div class="form-group">
-      <label class="form-label">Item</label>
-      <input type="text" class="form-control" id="buyItemName" readonly style="background:var(--bg)">
-    </div>
+    <div class="form-group"><label class="form-label">Item</label><input type="text" class="form-control" id="buyItemName" readonly style="background:var(--bg)"></div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Your Name *</label>
-        <input type="text" class="form-control" id="buyName" placeholder="Full name">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Phone *</label>
-        <input type="tel" class="form-control" id="buyPhone" placeholder="10-digit">
-      </div>
+      <div class="form-group"><label class="form-label">Name *</label><input type="text" class="form-control" id="buyName" placeholder="Full name"></div>
+      <div class="form-group"><label class="form-label">Phone *</label><input type="tel" class="form-control" id="buyPhone" placeholder="10-digit"></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Email *</label>
-      <input type="email" class="form-control" id="buyEmail" placeholder="your@email.com">
-    </div>
+    <div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-control" id="buyEmail" placeholder="your@email.com"></div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Quantity (kg) *</label>
-        <input type="number" class="form-control" id="buyQty" placeholder="e.g. 50" min="1">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Offer Price (₹/kg)</label>
-        <input type="number" class="form-control" id="buyOfferPrice" placeholder="Optional">
-      </div>
+      <div class="form-group"><label class="form-label">Quantity (kg) *</label><input type="number" class="form-control" id="buyQty" placeholder="e.g. 50" min="1"></div>
+      <div class="form-group"><label class="form-label">Offer Price (₹/kg)</label><input type="number" class="form-control" id="buyOfferPrice" placeholder="Optional"></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Message</label>
-      <textarea class="form-control" id="buyMessage" rows="2" placeholder="Any requirements..."></textarea>
-    </div>
+    <div class="form-group"><label class="form-label">Message</label><textarea class="form-control" id="buyMessage" rows="2" placeholder="Any requirements..."></textarea></div>
     <button class="btn btn-primary btn-block btn-lg" onclick="submitBuy()">✅ Submit Request</button>
   </div>
 </div>
@@ -285,194 +307,188 @@
 <!-- OFFER MODAL -->
 <div class="modal-overlay" id="offerModal">
   <div class="modal">
-    <div class="modal-header">
-      <div class="modal-title">💬 Make an Offer</div>
-      <button class="modal-close" onclick="closeOfferModal()">✕</button>
-    </div>
+    <div class="modal-header"><div class="modal-title">💬 Make Offer</div><button class="modal-close" onclick="closeOfferModal()">✕</button></div>
     <input type="hidden" id="offerListingId">
-    <div class="form-group">
-      <label class="form-label">Item</label>
-      <input type="text" class="form-control" id="offerItemName" readonly style="background:var(--bg)">
-    </div>
+    <div class="form-group"><label class="form-label">Item</label><input type="text" class="form-control" id="offerItemName" readonly style="background:var(--bg)"></div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Name *</label>
-        <input type="text" class="form-control" id="offerName" placeholder="Full name">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Phone *</label>
-        <input type="tel" class="form-control" id="offerPhone" placeholder="10-digit">
-      </div>
+      <div class="form-group"><label class="form-label">Name *</label><input type="text" class="form-control" id="offerName" placeholder="Full name"></div>
+      <div class="form-group"><label class="form-label">Phone *</label><input type="tel" class="form-control" id="offerPhone" placeholder="10-digit"></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Email *</label>
-      <input type="email" class="form-control" id="offerEmail" placeholder="your@email.com">
-    </div>
+    <div class="form-group"><label class="form-label">Email *</label><input type="email" class="form-control" id="offerEmail" placeholder="your@email.com"></div>
     <div class="form-row">
-      <div class="form-group">
-        <label class="form-label">Quantity (kg) *</label>
-        <input type="number" class="form-control" id="offerQty" placeholder="e.g. 50" min="1">
-      </div>
-      <div class="form-group">
-        <label class="form-label">Your Offer (₹/kg) *</label>
-        <input type="number" class="form-control" id="offerPrice" placeholder="Your price">
-      </div>
+      <div class="form-group"><label class="form-label">Qty (kg) *</label><input type="number" class="form-control" id="offerQty" placeholder="50" min="1"></div>
+      <div class="form-group"><label class="form-label">Your Price (₹/kg) *</label><input type="number" class="form-control" id="offerPrice" placeholder="Your offer"></div>
     </div>
-    <div class="form-group">
-      <label class="form-label">Message</label>
-      <textarea class="form-control" id="offerMessage" rows="2" placeholder="Reason for offer..."></textarea>
-    </div>
+    <div class="form-group"><label class="form-label">Message</label><textarea class="form-control" id="offerMessage" rows="2" placeholder="Reason for offer..."></textarea></div>
     <button class="btn btn-accent btn-block btn-lg" onclick="submitOffer()">📤 Send Offer</button>
   </div>
 </div>
 
 <div class="toast" id="toast"></div>
-<div class="loading-overlay" id="loadingOverlay">
-  <div class="spinner"></div>
-  <div class="loading-txt">Processing...</div>
-</div>
+<div class="loading-overlay" id="loadingOverlay"><div class="spinner"></div><div class="loading-txt">Processing...</div></div>
 
 <script>
-let currentCat = 'all';
-let currentQuality = 'all';
+// LANG TOGGLE
+let isHindi = false;
+function toggleLang() {
+  isHindi = !isHindi;
+  document.querySelectorAll('[data-en]').forEach(el => {
+    el.textContent = isHindi ? el.getAttribute('data-hi') : el.getAttribute('data-en');
+  });
+  document.getElementById('langBtn').textContent = isHindi ? '🇮🇳 English' : '🇮🇳 हिंदी';
+}
 
 function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
 document.addEventListener('click', function(e) {
-  const m = document.getElementById('mobileMenu');
-  const h = document.getElementById('hamburger');
-  if (!m.contains(e.target) && !h.contains(e.target)) m.classList.remove('open');
+  const m=document.getElementById('mobileMenu'), h=document.getElementById('hamburger');
+  if(!m.contains(e.target)&&!h.contains(e.target)) m.classList.remove('open');
 });
 
+// PRICE CALCULATOR
+function calcPrice(input, pricePerKg) {
+  const qty = parseFloat(input.value) || 0;
+  const total = (qty * pricePerKg).toFixed(0);
+  const card = input.closest('.card');
+  const listing_id = card ? card.querySelector('[id^="calc-"]') : null;
+  if(listing_id) listing_id.textContent = '₹' + parseInt(total).toLocaleString('en-IN');
+}
+
+// STAR RATING
+function highlightStars(el, count) {
+  const stars = el.parentElement.children;
+  for(let i=0; i<stars.length; i++) {
+    stars[i].style.color = i < count ? '#F59E0B' : '#D1D5DB';
+  }
+}
+function resetStars(container, currentRating) {
+  const stars = container.children;
+  for(let i=0; i<stars.length; i++) {
+    stars[i].style.color = i < Math.round(currentRating) ? '#F59E0B' : '#D1D5DB';
+  }
+}
+async function rateListing(id, rating, container) {
+  try {
+    const res = await fetch('/api/rate', {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({listing_id:id, rating:rating})
+    });
+    const data = await res.json();
+    if(data.success) {
+      showToast('⭐ Rating submitted! Avg: '+data.avg_rating+'/5', 'success');
+      const stars = container.children;
+      for(let i=0; i<stars.length; i++) {
+        stars[i].style.color = i < rating ? '#F59E0B' : '#D1D5DB';
+      }
+    }
+  } catch(e) { showToast('Rating failed', 'error'); }
+}
+
+// SHARE LISTING
+function shareListing(title, price, location) {
+  const text = `🌿 CIRCULINK pe waste available!\n📦 ${title}\n💰 ₹${price}/kg\n📍 ${location}\n♻️ Khareedne ke liye: ${window.location.origin}/marketplace`;
+  if(navigator.share) {
+    navigator.share({title:'CIRCULINK Listing', text:text}).catch(()=>{});
+  } else {
+    const waUrl = `https://wa.me/?text=${encodeURIComponent(text)}`;
+    window.open(waUrl, '_blank');
+  }
+  showToast('📤 Listing shared!', 'success');
+}
+
+// FILTERS
+let currentCat = 'all', currentQuality = 'all';
 function applySearch(q) { document.getElementById('searchInput').value = q; filterListings(); }
-
-function setCategory(el, cat) {
-  document.querySelectorAll('[data-cat]').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  currentCat = cat;
-  filterListings();
-}
-
-function setQuality(el, q) {
-  document.querySelectorAll('[data-quality]').forEach(c => c.classList.remove('active'));
-  el.classList.add('active');
-  currentQuality = q;
-  filterListings();
-}
+function setCategory(el, cat) { document.querySelectorAll('[data-cat]').forEach(c=>c.classList.remove('active')); el.classList.add('active'); currentCat=cat; filterListings(); }
+function setQuality(el, q) { document.querySelectorAll('[data-quality]').forEach(c=>c.classList.remove('active')); el.classList.add('active'); currentQuality=q; filterListings(); }
 
 function filterListings() {
   const search = document.getElementById('searchInput').value.toLowerCase().trim();
   const sort = document.getElementById('sortSelect').value;
+  const location = document.getElementById('locationSelect').value;
   const cards = Array.from(document.querySelectorAll('.listing-card'));
   let visible = 0;
-
   cards.forEach(card => {
-    const title = card.dataset.title || '';
-    const cat = card.dataset.cat || '';
-    const quality = card.dataset.quality || '';
+    const title = card.dataset.title||'';
+    const cat = card.dataset.cat||'';
+    const quality = card.dataset.quality||'';
+    const city = card.dataset.city||'';
+    const loc = card.dataset.location||'';
     const matchSearch = !search || title.includes(search) || cat.toLowerCase().includes(search);
-    const matchCat = currentCat === 'all' || cat === currentCat;
-    const matchQuality = currentQuality === 'all' || quality === currentQuality;
-
-    if (matchSearch && matchCat && matchQuality) {
-      card.style.display = '';
-      visible++;
-    } else {
-      card.style.display = 'none';
-    }
+    const matchCat = currentCat==='all' || cat===currentCat;
+    const matchQuality = currentQuality==='all' || quality===currentQuality;
+    const matchLocation = location==='all' || city===location || loc.includes(location);
+    if(matchSearch && matchCat && matchQuality && matchLocation) { card.style.display=''; visible++; }
+    else card.style.display='none';
   });
-
-  // Sort
   const grid = document.getElementById('listingsGrid');
-  if (grid) {
-    const visibleCards = cards.filter(c => c.style.display !== 'none');
-    visibleCards.sort((a, b) => {
-      if (sort === 'price_asc') return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
-      if (sort === 'price_desc') return parseFloat(b.dataset.price) - parseFloat(a.dataset.price);
-      if (sort === 'quality') return parseFloat(b.dataset.score) - parseFloat(a.dataset.score);
+  if(grid) {
+    const visibleCards = cards.filter(c=>c.style.display!=='none');
+    visibleCards.sort((a,b) => {
+      if(sort==='price_asc') return parseFloat(a.dataset.price)-parseFloat(b.dataset.price);
+      if(sort==='price_desc') return parseFloat(b.dataset.price)-parseFloat(a.dataset.price);
+      if(sort==='quality') return parseFloat(b.dataset.score)-parseFloat(a.dataset.score);
+      if(sort==='rating') return parseFloat(b.dataset.rating)-parseFloat(a.dataset.rating);
       return 0;
     });
-    visibleCards.forEach(c => grid.appendChild(c));
+    visibleCards.forEach(c=>grid.appendChild(c));
   }
-
   document.getElementById('totalCount').textContent = visible;
   const noRes = document.getElementById('noResults');
-  if (noRes) noRes.classList.toggle('hidden', visible > 0);
+  if(noRes) noRes.classList.toggle('hidden', visible>0);
 }
 
 function openBuyModal(id, title, price) {
-  document.getElementById('buyListingId').value = id;
-  document.getElementById('buyItemName').value = title;
-  document.getElementById('buyOfferPrice').placeholder = '₹' + price + ' (listed)';
+  document.getElementById('buyListingId').value=id;
+  document.getElementById('buyItemName').value=title;
+  document.getElementById('buyOfferPrice').placeholder='₹'+price+' (listed)';
   document.getElementById('buyModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
-function closeBuyModal() { document.getElementById('buyModal').classList.remove('open'); document.body.style.overflow = ''; }
-
+function closeBuyModal() { document.getElementById('buyModal').classList.remove('open'); document.body.style.overflow=''; }
 function openOfferModal(id, title, price) {
-  document.getElementById('offerListingId').value = id;
-  document.getElementById('offerItemName').value = title;
-  document.getElementById('offerPrice').value = Math.round(price * 0.9);
+  document.getElementById('offerListingId').value=id;
+  document.getElementById('offerItemName').value=title;
+  document.getElementById('offerPrice').value=Math.round(price*0.9);
   document.getElementById('offerModal').classList.add('open');
-  document.body.style.overflow = 'hidden';
+  document.body.style.overflow='hidden';
 }
-function closeOfferModal() { document.getElementById('offerModal').classList.remove('open'); document.body.style.overflow = ''; }
+function closeOfferModal() { document.getElementById('offerModal').classList.remove('open'); document.body.style.overflow=''; }
 
 async function submitBuy() {
-  const name = document.getElementById('buyName').value.trim();
-  const phone = document.getElementById('buyPhone').value.trim();
-  const email = document.getElementById('buyEmail').value.trim();
-  const qty = document.getElementById('buyQty').value;
-  if (!name || !phone || !email || !qty) { showToast('Fill all required fields', 'error'); return; }
+  const name=document.getElementById('buyName').value.trim();
+  const phone=document.getElementById('buyPhone').value.trim();
+  const email=document.getElementById('buyEmail').value.trim();
+  const qty=document.getElementById('buyQty').value;
+  if(!name||!phone||!email||!qty){showToast('Fill all required fields','error');return;}
   showLoading(true);
   try {
-    const res = await fetch('/api/buy', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        listing_id: document.getElementById('buyListingId').value,
-        buyer_name: name, buyer_phone: phone, buyer_email: email,
-        quantity_wanted: qty,
-        offer_price: document.getElementById('buyOfferPrice').value || null,
-        message: document.getElementById('buyMessage').value
-      })
-    });
-    const data = await res.json();
+    const res=await fetch('/api/buy',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({listing_id:document.getElementById('buyListingId').value,buyer_name:name,buyer_phone:phone,buyer_email:email,quantity_wanted:qty,offer_price:document.getElementById('buyOfferPrice').value||null,message:document.getElementById('buyMessage').value})});
+    const data=await res.json();
     showLoading(false);
-    if (data.success) { closeBuyModal(); showToast('✅ Request sent! Admin will contact you.', 'success'); }
-    else showToast(data.error || 'Failed', 'error');
-  } catch(e) { showLoading(false); showToast('Network error', 'error'); }
+    if(data.success){closeBuyModal();showToast('✅ Request sent! Admin will contact you.','success');}
+    else showToast(data.error||'Failed','error');
+  } catch(e){showLoading(false);showToast('Network error','error');}
 }
-
 async function submitOffer() {
-  const name = document.getElementById('offerName').value.trim();
-  const phone = document.getElementById('offerPhone').value.trim();
-  const email = document.getElementById('offerEmail').value.trim();
-  const qty = document.getElementById('offerQty').value;
-  const price = document.getElementById('offerPrice').value;
-  if (!name || !phone || !email || !qty || !price) { showToast('Fill all required fields', 'error'); return; }
+  const name=document.getElementById('offerName').value.trim();
+  const phone=document.getElementById('offerPhone').value.trim();
+  const email=document.getElementById('offerEmail').value.trim();
+  const qty=document.getElementById('offerQty').value;
+  const price=document.getElementById('offerPrice').value;
+  if(!name||!phone||!email||!qty||!price){showToast('Fill all required fields','error');return;}
   showLoading(true);
   try {
-    const res = await fetch('/api/buy', {
-      method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({
-        listing_id: document.getElementById('offerListingId').value,
-        buyer_name: name, buyer_phone: phone, buyer_email: email,
-        quantity_wanted: qty, offer_price: price,
-        message: document.getElementById('offerMessage').value
-      })
-    });
-    const data = await res.json();
+    const res=await fetch('/api/buy',{method:'POST',headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({listing_id:document.getElementById('offerListingId').value,buyer_name:name,buyer_phone:phone,buyer_email:email,quantity_wanted:qty,offer_price:price,message:document.getElementById('offerMessage').value})});
+    const data=await res.json();
     showLoading(false);
-    if (data.success) { closeOfferModal(); showToast('💬 Offer sent!', 'success'); }
-    else showToast(data.error || 'Failed', 'error');
-  } catch(e) { showLoading(false); showToast('Network error', 'error'); }
+    if(data.success){closeOfferModal();showToast('💬 Offer sent!','success');}
+    else showToast(data.error||'Failed','error');
+  } catch(e){showLoading(false);showToast('Network error','error');}
 }
-
-function showToast(msg, type='info') {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.className = 'toast ' + type + ' show';
-  setTimeout(() => t.classList.remove('show'), 4000);
-}
-function showLoading(show) { document.getElementById('loadingOverlay').classList.toggle('show', show); }
+function showToast(msg,type='info'){const t=document.getElementById('toast');t.textContent=msg;t.className='toast '+type+' show';setTimeout(()=>t.classList.remove('show'),4000);}
+function showLoading(show){document.getElementById('loadingOverlay').classList.toggle('show',show);}
 </script>
 </body>
 </html>
